@@ -16,6 +16,8 @@ class AppState: ObservableObject {
     @Published var extractionFileName: String = ""
     @Published var loadingProgress: Double = 0
     @Published var loadedEntryCount: Int = 0
+    @Published var focusedEntry: ZipEntry?
+    @Published var lastSelectedEntry: ZipEntry?
 
     private let archiveManager = ZipArchiveManager()
 
@@ -188,5 +190,38 @@ class AppState: ObservableObject {
 
     func clearSelection() {
         selectedEntries.removeAll()
+        lastSelectedEntry = nil
+    }
+
+    func selectAll(from entries: [ZipEntry]) {
+        selectedEntries = Set(entries)
+        lastSelectedEntry = entries.last
+    }
+
+    func selectRange(from: ZipEntry, to: ZipEntry, in entries: [ZipEntry]) {
+        guard let fromIndex = entries.firstIndex(of: from),
+              let toIndex = entries.firstIndex(of: to) else {
+            return
+        }
+
+        let startIndex = min(fromIndex, toIndex)
+        let endIndex = max(fromIndex, toIndex)
+
+        for i in startIndex...endIndex {
+            selectedEntries.insert(entries[i])
+        }
+    }
+
+    func selectSingle(_ entry: ZipEntry) {
+        selectedEntries = [entry]
+        lastSelectedEntry = entry
+        focusedEntry = entry
+    }
+
+    func copySelectedPaths() {
+        let paths = selectedEntries.map { $0.path }.joined(separator: "\n")
+        let pasteboard = NSPasteboard.general
+        pasteboard.clearContents()
+        pasteboard.setString(paths, forType: .string)
     }
 }

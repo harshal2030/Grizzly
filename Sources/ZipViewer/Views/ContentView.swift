@@ -6,6 +6,7 @@ struct ContentView: View {
     @State private var showingDestinationPicker = false
     @State private var selectedDestinationURL: URL?
     @State private var isTargeted = false
+    @FocusState private var searchFieldFocused: Bool
 
     var body: some View {
         HStack(spacing: 0) {
@@ -14,7 +15,7 @@ struct ContentView: View {
                 if appState.entries.isEmpty {
                     emptyStateView
                 } else {
-                    ZipTreeView(entries: appState.filteredEntries)
+                    ZipTreeView(entries: appState.filteredEntries, searchFieldFocused: $searchFieldFocused)
                         .searchable(text: $appState.searchQuery, prompt: "Search files and folders")
                         .environmentObject(appState)
                 }
