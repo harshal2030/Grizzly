@@ -1,9 +1,6 @@
 # Swift Package Manager
 .build/
 .swiftpm/
-Package.resolved
-*.xcodeproj
-*.xcworkspace
 
 # macOS
 .DS_Store
@@ -24,7 +21,6 @@ DerivedData/
 
 # Build artifacts
 build/
-*.app
 
 # Swift
 *.swiftmodule

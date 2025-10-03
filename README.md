@@ -20,12 +20,25 @@ A modern macOS application for viewing and extracting ZIP archives, built with S
 - Xcode 15.0 or later (for building from source)
 - Swift 5.9 or later
 
+## Installation
+
+### Download Pre-built App (Recommended)
+
+1. Go to the [Releases](../../releases) page
+2. Download the latest `Grizzly-X.X.X.dmg`
+3. Open the DMG file
+4. Drag `Grizzly.app` to the Applications folder
+5. Right-click the app and select "Open" the first time to bypass Gatekeeper
+
+### Build from Source
+
 ## Building from Source
 
 ### Quick Build (Swift Package Manager)
 
 ```bash
-cd ZipViewer
+git clone https://github.com/YOUR_USERNAME/Grizzly.git
+cd Grizzly
 swift build
 swift run
 ```
@@ -36,16 +49,16 @@ swift run
 ./build-app.sh
 ```
 
-This creates a full `.app` bundle at `.build/release/ZipViewer.app` with:
+This creates a full `.app` bundle at `.build/release/Grizzly.app` with:
 - Custom app icon
 - File associations for .zip files
 - Proper bundle structure for distribution
 
 To install:
 ```bash
-open .build/release/ZipViewer.app  # Run the app
+open .build/release/Grizzly.app  # Run the app
 # or
-cp -r .build/release/ZipViewer.app /Applications/  # Install to Applications
+cp -r .build/release/Grizzly.app /Applications/  # Install to Applications
 ```
 
 ### Build with Xcode
@@ -96,3 +109,36 @@ The app is built using modern SwiftUI patterns:
 - **Models**: `ZipEntry` for representing archive contents, `ZipArchiveManager` for archive operations
 - **ViewModels**: `AppState` for managing application state
 - **Views**: SwiftUI components for the user interface
+
+## Dependencies
+
+- [ZIPFoundation](https://github.com/weichsel/ZIPFoundation): Robust zip archive handling
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## Releasing
+
+To create a new release:
+
+1. Tag your commit with a version number:
+   ```bash
+   git tag v1.0.0
+   git push origin v1.0.0
+   ```
+
+2. GitHub Actions will automatically:
+   - Build the app
+   - Create a DMG installer
+   - Publish a new release with the DMG attached
+
+3. The release will appear on the [Releases](../../releases) page
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Support
+
+If you encounter any issues or have suggestions, please [open an issue](../../issues) on GitHub.
