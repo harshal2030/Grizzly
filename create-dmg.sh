@@ -44,12 +44,8 @@ hdiutil create -volname "$VOLUME_NAME" \
 # Mount the temporary DMG
 echo "Mounting temporary DMG..."
 MOUNT_OUTPUT=$(hdiutil attach -readwrite -noverify -noautoopen "$TEMP_DMG")
-echo "$MOUNT_OUTPUT"
 MOUNT_DIR=$(echo "$MOUNT_OUTPUT" | grep -E '^/dev/' | sed 1q | awk '{print $NF}')
 DEVICE=$(echo "$MOUNT_OUTPUT" | grep -E '^/dev/' | sed 1q | awk '{print $1}')
-
-echo "Mount dir: $MOUNT_DIR"
-echo "Device: $DEVICE"
 
 # Wait for mount
 sleep 2
@@ -82,15 +78,11 @@ fi
 
 # Unmount the temporary DMG
 echo "Unmounting temporary DMG..."
-# Try device first, then mount dir
 if [ -n "$DEVICE" ]; then
-    echo "Detaching device: $DEVICE"
     hdiutil detach "$DEVICE" -force || true
 elif [ -n "$MOUNT_DIR" ]; then
-    echo "Detaching mount dir: $MOUNT_DIR"
     hdiutil detach "$MOUNT_DIR" -force || true
 else
-    echo "Warning: Could not find device or mount dir, trying to find mounted volume..."
     hdiutil detach "/Volumes/$VOLUME_NAME" -force || true
 fi
 
@@ -98,7 +90,6 @@ sleep 3
 
 # Double-check nothing is still mounted
 hdiutil info | grep -q "$TEMP_DMG" && {
-    echo "Still mounted, forcing detach of all..."
     hdiutil detach -all -force || true
     sleep 2
 }
