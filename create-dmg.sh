@@ -76,8 +76,16 @@ fi
 
 # Unmount the temporary DMG
 echo "Unmounting temporary DMG..."
-hdiutil detach "$MOUNT_DIR" 2>/dev/null || true
-sleep 2
+# Force unmount and wait for completion
+hdiutil detach "$MOUNT_DIR" -force || true
+sleep 3
+
+# Verify it's unmounted
+if [ -d "$MOUNT_DIR" ]; then
+    echo "Force unmounting again..."
+    diskutil unmount force "$MOUNT_DIR" || true
+    sleep 2
+fi
 
 # Convert to final compressed DMG
 echo "Creating final compressed DMG..."
