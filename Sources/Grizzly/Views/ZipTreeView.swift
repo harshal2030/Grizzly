@@ -82,50 +82,54 @@ struct ZipTreeView: View {
     }
 
     private var fileListView: some View {
-        List(selection: Binding(
-            get: { appState.selectedEntries },
-            set: { newSelection in
-                appState.selectedEntries = newSelection
+        ScrollViewReader { proxy in
+            List(selection: Binding(
+                get: { appState.selectedEntries },
+                set: { newSelection in
+                    appState.selectedEntries = newSelection
+                }
+            )) {
+                ForEach(currentEntries, id: \.self) { entry in
+                    FileRowContent(entry: entry)
+                        .tag(entry)
+                        .id(entry)
+                        .gesture(
+                            TapGesture()
+                                .modifiers(.command)
+                                .onEnded { _ in
+                                    handleCommandClick(entry)
+                                }
+                        )
+                        .gesture(
+                            TapGesture()
+                                .modifiers(.shift)
+                                .onEnded { _ in
+                                    handleShiftClick(entry)
+                                }
+                        )
+                }
             }
-        )) {
-            ForEach(currentEntries, id: \.self) { entry in
-                FileRowContent(entry: entry)
-                    .tag(entry)
-                    .gesture(
-                        TapGesture()
-                            .modifiers(.command)
-                            .onEnded { _ in
-                                handleCommandClick(entry)
-                            }
-                    )
-                    .gesture(
-                        TapGesture()
-                            .modifiers(.shift)
-                            .onEnded { _ in
-                                handleShiftClick(entry)
-                            }
-                    )
-            }
+            .listStyle(.sidebar)
+            .focused($isFocused)
+            .modifier(KeyboardShortcutsModifier(
+                appState: appState,
+                currentEntries: currentEntries,
+                searchFieldFocused: searchFieldFocused,
+                scrollProxy: proxy,
+                onSpace: handleSpacebarPreview,
+                onReturn: handleReturn,
+                onDelete: handleDelete,
+                onNavigateUp: navigateUp,
+                onCommandDown: handleCommandDown,
+                onArrowUp: { handleArrowNavigation(direction: .up, scrollProxy: proxy) },
+                onArrowDown: { handleArrowNavigation(direction: .down, scrollProxy: proxy) },
+                onShiftUp: { handleShiftArrow(direction: .up, scrollProxy: proxy) },
+                onShiftDown: { handleShiftArrow(direction: .down, scrollProxy: proxy) },
+                onCommandO: handleCommandO,
+                onExtractSelected: handleExtractSelected,
+                onExtractAll: handleExtractAll
+            ))
         }
-        .listStyle(.sidebar)
-        .focused($isFocused)
-        .modifier(KeyboardShortcutsModifier(
-            appState: appState,
-            currentEntries: currentEntries,
-            searchFieldFocused: searchFieldFocused,
-            onSpace: handleSpacebarPreview,
-            onReturn: handleReturn,
-            onDelete: handleDelete,
-            onNavigateUp: navigateUp,
-            onCommandDown: handleCommandDown,
-            onArrowUp: { handleArrowNavigation(direction: .up) },
-            onArrowDown: { handleArrowNavigation(direction: .down) },
-            onShiftUp: { handleShiftArrow(direction: .up) },
-            onShiftDown: { handleShiftArrow(direction: .down) },
-            onCommandO: handleCommandO,
-            onExtractSelected: handleExtractSelected,
-            onExtractAll: handleExtractAll
-        ))
     }
 
     @ViewBuilder
@@ -254,7 +258,7 @@ struct ZipTreeView: View {
 
     // MARK: - Keyboard Navigation Handlers
 
-    private func handleArrowNavigation(direction: ArrowDirection) {
+    private func handleArrowNavigation(direction: ArrowDirection, scrollProxy: ScrollViewProxy) {
         let focused = appState.focusedEntry ?? appState.selectedEntries.first
 
         guard !currentEntries.isEmpty else { return }
@@ -270,15 +274,19 @@ struct ZipTreeView: View {
             }
 
             if newIndex != currentIndex {
-                appState.selectSingle(currentEntries[newIndex])
+                let newEntry = currentEntries[newIndex]
+                appState.selectSingle(newEntry)
+                scrollProxy.scrollTo(newEntry, anchor: nil)
             }
         } else {
             // No selection, select first item
-            appState.selectSingle(currentEntries[0])
+            let firstEntry = currentEntries[0]
+            appState.selectSingle(firstEntry)
+            scrollProxy.scrollTo(firstEntry, anchor: nil)
         }
     }
 
-    private func handleShiftArrow(direction: ArrowDirection) {
+    private func handleShiftArrow(direction: ArrowDirection, scrollProxy: ScrollViewProxy) {
         guard !currentEntries.isEmpty else { return }
 
         let anchor = appState.lastSelectedEntry ?? appState.selectedEntries.first
@@ -295,12 +303,15 @@ struct ZipTreeView: View {
             }
 
             if newIndex != focusedIndex {
-                appState.focusedEntry = currentEntries[newIndex]
+                let newEntry = currentEntries[newIndex]
+                appState.focusedEntry = newEntry
                 appState.selectedEntries.removeAll()
-                appState.selectRange(from: anchor, to: currentEntries[newIndex], in: currentEntries)
+                appState.selectRange(from: anchor, to: newEntry, in: currentEntries)
+                scrollProxy.scrollTo(newEntry, anchor: nil)
             }
         } else if let first = currentEntries.first {
             appState.selectSingle(first)
+            scrollProxy.scrollTo(first, anchor: nil)
         }
     }
 
@@ -433,6 +444,7 @@ struct KeyboardShortcutsModifier: ViewModifier {
     @ObservedObject var appState: AppState
     let currentEntries: [ZipEntry]
     let searchFieldFocused: FocusState<Bool>.Binding
+    let scrollProxy: ScrollViewProxy
     let onSpace: () -> Void
     let onReturn: () -> Void
     let onDelete: () -> Void
