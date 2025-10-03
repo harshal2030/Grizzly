@@ -48,31 +48,35 @@ MOUNT_DIR=$(hdiutil attach -readwrite -noverify -noautoopen "$TEMP_DMG" | grep -
 # Wait for mount
 sleep 2
 
-# Set DMG window properties and icon positions
-echo "Configuring DMG layout..."
-echo '
-   tell application "Finder"
-     tell disk "'${VOLUME_NAME}'"
-           open
-           set current view of container window to icon view
-           set toolbar visible of container window to false
-           set statusbar visible of container window to false
-           set the bounds of container window to {400, 100, 900, 500}
-           set viewOptions to the icon view options of container window
-           set arrangement of viewOptions to not arranged
-           set icon size of viewOptions to 128
-           set position of item "'${APP_NAME}'.app" of container window to {125, 150}
-           set position of item "Applications" of container window to {375, 150}
-           set background picture of viewOptions to file ".background:background.png"
-           update without registering applications
-           delay 2
-     end tell
-   end tell
-' | osascript || true
+# Set DMG window properties and icon positions (skip on CI)
+if [ -z "$CI" ]; then
+    echo "Configuring DMG layout..."
+    echo '
+       tell application "Finder"
+         tell disk "'${VOLUME_NAME}'"
+               open
+               set current view of container window to icon view
+               set toolbar visible of container window to false
+               set statusbar visible of container window to false
+               set the bounds of container window to {400, 100, 900, 500}
+               set viewOptions to the icon view options of container window
+               set arrangement of viewOptions to not arranged
+               set icon size of viewOptions to 128
+               set position of item "'${APP_NAME}'.app" of container window to {125, 150}
+               set position of item "Applications" of container window to {375, 150}
+               set background picture of viewOptions to file ".background:background.png"
+               update without registering applications
+               delay 2
+         end tell
+       end tell
+    ' | osascript || true
+else
+    echo "Skipping DMG layout configuration (running in CI)..."
+fi
 
 # Unmount the temporary DMG
 echo "Unmounting temporary DMG..."
-hdiutil detach "$MOUNT_DIR" || true
+hdiutil detach "$MOUNT_DIR" 2>/dev/null || true
 sleep 2
 
 # Convert to final compressed DMG
