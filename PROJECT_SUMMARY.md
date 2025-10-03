@@ -1,7 +1,7 @@
-# ZipViewer Project Summary
+# Grizzly Project Summary
 
 ## Overview
-ZipViewer is a modern macOS application built with SwiftUI for viewing and extracting ZIP archives. It provides a Finder-like experience with advanced features like Quick Look preview, search, and multiple file selection.
+Grizzly is a modern macOS application built with SwiftUI for viewing and extracting ZIP archives. It provides a Finder-like experience with advanced features like Quick Look preview, search, and multiple file selection.
 
 ## Project Structure
 
@@ -22,7 +22,10 @@ ZipViewer/
 ├── README.md                          # Project overview
 ├── SETUP.md                           # Detailed setup instructions
 ├── QUICKSTART.md                      # Quick start guide
-└── build.sh                           # Build script
+├── build.sh                           # Simple build script
+├── build-app.sh                       # macOS app bundle build script
+├── create-icon.sh                     # App icon generator script
+└── AppIcon.icns                       # Custom app icon
 
 ```
 
@@ -112,6 +115,17 @@ swift build
 swift run
 ```
 
+### Build macOS App Bundle
+```bash
+./build-app.sh
+open .build/release/Grizzly.app
+```
+
+This creates a complete `.app` bundle with:
+- Custom app icon
+- File associations for .zip files
+- Proper bundle structure
+
 ### Xcode
 ```bash
 open Package.swift
@@ -169,14 +183,3 @@ No automated tests are currently implemented. Manual testing covers:
 - Search filters in-memory (no indexing)
 - Suitable for archives up to several hundred MB
 - For very large archives (GB+), consider streaming approaches
-
-## License
-
-Copyright © 2025. All rights reserved.
-
-## Credits
-
-Built with:
-- SwiftUI by Apple
-- [ZIPFoundation](https://github.com/weichsel/ZIPFoundation) by Thomas Zoechling
-- SF Symbols by Apple

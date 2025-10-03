@@ -1,10 +1,10 @@
-# ZipViewer
+# Grizzly
 
 A modern macOS application for viewing and extracting ZIP archives, built with SwiftUI.
 
 ## Features
 
-- **Hierarchical File Browser**: Navigate through zip contents with a Finder-like tree view
+- **Hierarchical File Browser**: Navigate through zip contents with a Finder-like view
 - **File & Folder Selection**: Select single or multiple items for extraction
 - **Quick Look Preview**: Press spacebar to preview files without extracting (text, images, PDFs, etc.)
 - **Search & Filter**: Quickly find files and folders within the archive
@@ -22,13 +22,37 @@ A modern macOS application for viewing and extracting ZIP archives, built with S
 
 ## Building from Source
 
-1. Clone the repository
-2. Navigate to the ZipViewer directory
-3. Open the project in Xcode or build with Swift Package Manager:
+### Quick Build (Swift Package Manager)
 
 ```bash
 cd ZipViewer
 swift build
+swift run
+```
+
+### Build macOS App Bundle
+
+```bash
+./build-app.sh
+```
+
+This creates a full `.app` bundle at `.build/release/ZipViewer.app` with:
+- Custom app icon
+- File associations for .zip files
+- Proper bundle structure for distribution
+
+To install:
+```bash
+open .build/release/ZipViewer.app  # Run the app
+# or
+cp -r .build/release/ZipViewer.app /Applications/  # Install to Applications
+```
+
+### Build with Xcode
+
+```bash
+open Package.swift
+# Then press Cmd+R to run
 ```
 
 ## Usage
@@ -37,7 +61,7 @@ swift build
 
 1. **Drag & Drop**: Drag a .zip file onto the application window
 2. **File Menu**: Use Cmd+O or File → Open to select a zip file
-3. **Double-click**: Associate .zip files with ZipViewer (coming soon)
+3. **Double-click**: Associate .zip files with Grizzly and open them directly
 
 ### Navigating Contents
 
@@ -72,11 +96,3 @@ The app is built using modern SwiftUI patterns:
 - **Models**: `ZipEntry` for representing archive contents, `ZipArchiveManager` for archive operations
 - **ViewModels**: `AppState` for managing application state
 - **Views**: SwiftUI components for the user interface
-
-## Dependencies
-
-- [ZIPFoundation](https://github.com/weichsel/ZIPFoundation): Robust zip archive handling
-
-## License
-
-Copyright © 2025. All rights reserved.

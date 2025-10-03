@@ -1,4 +1,4 @@
-# ZipViewer Setup Guide
+# Grizzly Setup Guide
 
 ## System Requirements
 
@@ -62,18 +62,45 @@ open ZipViewer.xcodeproj
 
 ## Creating a Proper macOS App Bundle
 
-For a distributable app, you'll need to create it through Xcode:
+### Option A: Use the Build Script (Recommended)
+
+The project includes a build script that creates a complete `.app` bundle:
+
+```bash
+./build-app.sh
+```
+
+This will:
+- Build the release binary
+- Create the app bundle structure at `.build/release/Grizzly.app`
+- Include the custom app icon (AppIcon.icns)
+- Configure file associations for .zip files
+- Set up proper Info.plist with bundle identifier `com.grizzly.ZipViewer`
+
+To run the app:
+```bash
+open .build/release/Grizzly.app
+```
+
+To install to Applications:
+```bash
+cp -r .build/release/Grizzly.app /Applications/
+```
+
+### Option B: Manual Xcode Target (Advanced)
+
+For a distributable app with code signing, you can create it through Xcode:
 
 1. Open Package.swift in Xcode
 2. Go to File → New → Target
 3. Select "macOS" → "App"
 4. Configure:
-   - Product Name: ZipViewer
+   - Product Name: Grizzly
    - Team: Your development team
    - Organization Identifier: com.yourcompany
    - Interface: SwiftUI
    - Language: Swift
-5. Copy all Swift files from ZipViewer folder to the new target
+5. Copy all Swift files from Grizzly folder to the new target
 6. Update Package.swift dependencies in the new target
 7. Build and Archive (Product → Archive)
 

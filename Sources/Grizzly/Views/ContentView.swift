@@ -64,6 +64,11 @@ struct ContentView: View {
         .onReceive(NotificationCenter.default.publisher(for: .openZipFile)) { _ in
             appState.showFilePicker = true
         }
+        .onReceive(NotificationCenter.default.publisher(for: .openZipFileWithURL)) { notification in
+            if let url = notification.object as? URL {
+                appState.openZipFile(at: url)
+            }
+        }
         .onDrop(of: [.fileURL], isTargeted: $isTargeted) { providers in
             handleDrop(providers: providers)
         }

@@ -1,6 +1,8 @@
 # Quick Start Guide
 
-## Build and Run (3 steps)
+## Build and Run
+
+### Option 1: Quick Test (3 steps)
 
 1. **Navigate to project:**
    ```bash
@@ -16,6 +18,28 @@
    ```bash
    swift run
    ```
+
+### Option 2: Build macOS App Bundle (Recommended)
+
+1. **Build the app bundle:**
+   ```bash
+   ./build-app.sh
+   ```
+
+2. **Run the app:**
+   ```bash
+   open .build/release/Grizzly.app
+   ```
+
+3. **Optional - Install to Applications:**
+   ```bash
+   cp -r .build/release/Grizzly.app /Applications/
+   ```
+
+This creates a proper macOS app with:
+- Custom app icon
+- File associations for .zip files (double-click to open)
+- Can be launched from Finder or Spotlight
 
 ## Using the App
 

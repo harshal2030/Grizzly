@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# Build script to create a macOS .app bundle for ZipViewer
+# Build script to create a macOS .app bundle for Grizzly
 
 set -e
 
-echo "🔨 Building ZipViewer.app..."
+echo "🔨 Building Grizzly.app..."
 
 # Navigate to the project directory
 cd "$(dirname "$0")"
@@ -13,7 +13,7 @@ cd "$(dirname "$0")"
 swift build -c release
 
 # Create app bundle structure
-APP_NAME="ZipViewer"
+APP_NAME="Grizzly"
 APP_BUNDLE="$APP_NAME.app"
 BUILD_DIR=".build/release"
 APP_DIR="$BUILD_DIR/$APP_BUNDLE"
@@ -28,7 +28,13 @@ mkdir -p "$APP_DIR/Contents/MacOS"
 mkdir -p "$APP_DIR/Contents/Resources"
 
 # Copy the executable
-cp "$BUILD_DIR/$APP_NAME" "$APP_DIR/Contents/MacOS/"
+cp "$BUILD_DIR/$APP_NAME" "$APP_DIR/Contents/MacOS/$APP_NAME"
+
+# Copy icon if it exists
+if [ -f "AppIcon.icns" ]; then
+    echo "📎 Adding app icon..."
+    cp "AppIcon.icns" "$APP_DIR/Contents/Resources/"
+fi
 
 # Create Info.plist
 cat > "$APP_DIR/Contents/Info.plist" << EOF
@@ -48,6 +54,8 @@ cat > "$APP_DIR/Contents/Info.plist" << EOF
     <string>1.0</string>
     <key>CFBundleVersion</key>
     <string>1</string>
+    <key>CFBundleIconFile</key>
+    <string>AppIcon</string>
     <key>LSMinimumSystemVersion</key>
     <string>14.0</string>
     <key>NSHighResolutionCapable</key>
@@ -60,11 +68,47 @@ cat > "$APP_DIR/Contents/Info.plist" << EOF
             <key>CFBundleTypeName</key>
             <string>ZIP Archive</string>
             <key>CFBundleTypeRole</key>
-            <string>Viewer</string>
+            <string>Editor</string>
+            <key>CFBundleTypeIconFile</key>
+            <string>AppIcon</string>
+            <key>LSHandlerRank</key>
+            <string>Default</string>
             <key>LSItemContentTypes</key>
             <array>
                 <string>public.zip-archive</string>
+                <string>com.pkware.zip-archive</string>
             </array>
+            <key>CFBundleTypeExtensions</key>
+            <array>
+                <string>zip</string>
+            </array>
+        </dict>
+    </array>
+    <key>UTExportedTypeDeclarations</key>
+    <array>
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>public.zip-archive</string>
+            <key>UTTypeReferenceURL</key>
+            <string>https://en.wikipedia.org/wiki/ZIP_(file_format)</string>
+            <key>UTTypeDescription</key>
+            <string>ZIP Archive</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.data</string>
+                <string>public.archive</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>zip</string>
+                </array>
+                <key>public.mime-type</key>
+                <array>
+                    <string>application/zip</string>
+                </array>
+            </dict>
         </dict>
     </array>
 </dict>

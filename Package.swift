@@ -2,7 +2,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "ZipViewer",
+    name: "Grizzly",
     platforms: [
         .macOS(.v14)
     ],
@@ -11,7 +11,7 @@ let package = Package(
     ],
     targets: [
         .executableTarget(
-            name: "ZipViewer",
+            name: "Grizzly",
             dependencies: [
                 .product(name: "ZIPFoundation", package: "ZIPFoundation")
             ]

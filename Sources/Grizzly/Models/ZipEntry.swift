@@ -58,17 +58,35 @@ struct ZipEntry: Identifiable, Hashable {
         }
     }
 
+    var totalUncompressedSize: UInt64 {
+        if isDirectory {
+            return children.reduce(0) { $0 + $1.totalUncompressedSize }
+        }
+        return uncompressedSize
+    }
+
+    var totalCompressedSize: UInt64 {
+        if isDirectory {
+            return children.reduce(0) { $0 + $1.totalCompressedSize }
+        }
+        return compressedSize
+    }
+
     var formattedSize: String {
-        return ByteCountFormatter.string(fromByteCount: Int64(uncompressedSize), countStyle: .file)
+        let size = isDirectory ? totalUncompressedSize : uncompressedSize
+        return ByteCountFormatter.string(fromByteCount: Int64(size), countStyle: .file)
     }
 
     var formattedCompressedSize: String {
-        return ByteCountFormatter.string(fromByteCount: Int64(compressedSize), countStyle: .file)
+        let size = isDirectory ? totalCompressedSize : compressedSize
+        return ByteCountFormatter.string(fromByteCount: Int64(size), countStyle: .file)
     }
 
     var compressionRatio: Double {
-        guard uncompressedSize > 0 else { return 0 }
-        return Double(compressedSize) / Double(uncompressedSize)
+        let uncompressed = isDirectory ? totalUncompressedSize : uncompressedSize
+        guard uncompressed > 0 else { return 0 }
+        let compressed = isDirectory ? totalCompressedSize : compressedSize
+        return Double(compressed) / Double(uncompressed)
     }
 
     var fileType: String {
