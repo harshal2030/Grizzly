@@ -50,9 +50,11 @@ This creates a proper macOS app with:
 
 ### Browsing Contents
 - **Double-click folders** to navigate into them
-- Use the **Back button** or breadcrumb navigation to go up
+- Use the **Back button** or **breadcrumb trail** to navigate up/to specific folder
 - Single-click to select a file or folder
-- Use search bar at the top to filter items in current folder
+- **Arrow keys** (↑/↓) to navigate between items
+- **Return** to open file or enter folder
+- Use search bar to filter items (works across all folders)
 
 ### Opening & Previewing Files
 
@@ -84,29 +86,49 @@ This creates a proper macOS app with:
 
 ## Keyboard Shortcuts
 
-- `Cmd+O` - Open zip file
-- `Double-click` - Open file with default app (or navigate into folder)
-- `Spacebar` - Quick Look preview (no extraction)
-- `Cmd+Click` - Multi-select
-- `Shift+Click` - Range select
+### Navigation
+- `↑/↓` - Navigate between items
+- `Shift+↑/↓` - Extend selection (range select)
+- `Cmd+↑` - Navigate up to parent folder
+- `Cmd+↓` - Navigate into selected folder
+- `Return` - Open file or enter folder
+- `Delete` - Clear selection or go up
+
+### Selection
+- `Cmd+A` - Select all
+- `Escape` - Clear selection
+- `Cmd+C` - Copy file paths
+
+### File Operations
+- `Cmd+O` - Open zip file / Open selected files
+- `Spacebar` - Quick Look preview
+- `Cmd+E` - Extract selected items
+- `Cmd+Shift+E` - Extract all
+- `Cmd+F` - Focus search
 
 ## Features Showcase
 
-✅ Finder-like tree navigation
-✅ Multiple file selection
-✅ Quick Look preview (spacebar)
-✅ Search and filter
+✅ Finder-like tree navigation with breadcrumb trail
+✅ Multiple file selection (Cmd+Click, Shift+Click)
+✅ Quick Look preview (Spacebar)
+✅ Recursive search and filter
 ✅ Drag & drop support
-✅ Progress tracking during extraction
+✅ Progress tracking during extraction and loading
 ✅ Context menu support
+✅ Full keyboard navigation
+✅ Memory-efficient - handles large archives (GB+)
+✅ Detail panel with file information
 
 ## Tips
 
 - You can select multiple items to extract them all at once
-- The search works on file and folder names
-- Preview works for most common file types
+- The search works recursively across all folders
+- Preview works for most file types supported by macOS Quick Look
 - Extraction preserves the folder structure
-- The app shows file sizes and compression ratios
+- The app shows file sizes and compression ratios in the detail panel
+- Use keyboard shortcuts for faster navigation
+- The app efficiently handles large archives - only metadata is kept in memory
+- Use `Cmd+C` to copy file paths from the archive
 
 ## Troubleshooting
 

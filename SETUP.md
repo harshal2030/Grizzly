@@ -23,9 +23,9 @@ swift build
 swift run
 ```
 
-## Option 2: Create Xcode Project (Recommended for Development)
+## Option 2: Open in Xcode (Recommended for Development)
 
-Since this is a Swift Package, you can create an Xcode project:
+Since this is a Swift Package, you can open it directly in Xcode:
 
 1. Navigate to the project directory:
 ```bash
@@ -37,25 +37,27 @@ cd ZipViewer
 open Package.swift
 ```
 
-3. Xcode will automatically create a project workspace
+3. Xcode will automatically load the package
 
-4. Select the ZipViewer scheme and click Run (Cmd+R)
+4. Select the Grizzly scheme and click Run (Cmd+R)
 
-## Option 3: Generate Xcode Project Manually
+## Option 3: Generate Xcode Project (Legacy)
+
+**Note**: `swift package generate-xcodeproj` is deprecated. Use Option 2 instead.
 
 1. Navigate to the project directory:
 ```bash
 cd ZipViewer
 ```
 
-2. Generate the Xcode project:
+2. Generate the Xcode project (deprecated):
 ```bash
 swift package generate-xcodeproj
 ```
 
 3. Open the generated project:
 ```bash
-open ZipViewer.xcodeproj
+open Grizzly.xcodeproj
 ```
 
 4. Build and run (Cmd+R)
@@ -87,7 +89,22 @@ To install to Applications:
 cp -r .build/release/Grizzly.app /Applications/
 ```
 
-### Option B: Manual Xcode Target (Advanced)
+### Option B: Build DMG Installer
+
+To create a distributable DMG installer:
+
+```bash
+./create-dmg.sh
+```
+
+This will:
+- Build the release app bundle
+- Create a DMG installer at `.build/release/Grizzly-{version}.dmg`
+- Include a customized DMG with installation instructions
+
+**Note**: For distribution outside the Mac App Store, you'll need to code sign the app with your Apple Developer certificate.
+
+### Option C: Manual Xcode Target (Advanced)
 
 For a distributable app with code signing, you can create it through Xcode:
 
@@ -101,7 +118,7 @@ For a distributable app with code signing, you can create it through Xcode:
    - Interface: SwiftUI
    - Language: Swift
 5. Copy all Swift files from Grizzly folder to the new target
-6. Update Package.swift dependencies in the new target
+6. Add ZIPFoundation dependency to the new target
 7. Build and Archive (Product → Archive)
 
 ## Troubleshooting
@@ -118,9 +135,22 @@ swift build
 
 SwiftUI previews might not work correctly with Swift Package Manager. Use Xcode's app target for better preview support.
 
+## Continuous Integration
+
+The project includes GitHub Actions CI/CD that automatically:
+- Builds the app on every push
+- Creates DMG installers for tagged releases
+- Publishes releases with downloadable DMG files
+
+To create a release:
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
 ## Running Tests
 
 Currently, no tests are implemented. To add tests:
-1. Create a Tests directory
+1. Create a Tests directory with `GrizzlyTests` target
 2. Add test files
 3. Run: `swift test`

@@ -38,7 +38,7 @@ A modern macOS application for viewing and extracting ZIP archives, built with S
 
 ```bash
 git clone https://github.com/YOUR_USERNAME/Grizzly.git
-cd Grizzly
+cd Grizzly/ZipViewer
 swift build
 swift run
 ```
@@ -82,8 +82,10 @@ open Package.swift
 - **Double-click files** to extract and open them with default application
 - **Back button** or breadcrumb navigation to go up directories
 - Single-click to select a file or folder
-- Cmd+Click to select multiple items
+- Cmd+Click to toggle selection (multi-select)
 - Shift+Click to select a range of items
+- Arrow keys (↑/↓) to navigate between items
+- Return to open selected file or enter folder
 
 ### Previewing & Opening Files
 
@@ -102,17 +104,41 @@ open Package.swift
 
 Use the search bar at the top of the sidebar to filter files and folders by name.
 
+## Keyboard Shortcuts
+
+### Navigation
+- `↑/↓` - Navigate between items
+- `Shift+↑/↓` - Extend selection (range select)
+- `Cmd+↑` - Navigate up to parent folder
+- `Cmd+↓` - Navigate into selected folder
+- `Return` - Open file or enter folder
+- `Delete/Backspace` - Clear selection or go up
+
+### Selection
+- `Cmd+A` - Select all in current view
+- `Escape` - Clear selection
+- `Cmd+C` - Copy selected file paths
+
+### File Operations
+- `Cmd+O` - Open zip file / Open selected files
+- `Spacebar` - Quick Look preview
+- `Cmd+E` - Extract selected items
+- `Cmd+Shift+E` - Extract all
+- `Cmd+F` - Focus search field
+
 ## Architecture
 
-The app is built using modern SwiftUI patterns:
+The app is built using modern SwiftUI patterns with async/await:
 
-- **Models**: `ZipEntry` for representing archive contents, `ZipArchiveManager` for archive operations
-- **ViewModels**: `AppState` for managing application state
-- **Views**: SwiftUI components for the user interface
+- **Models**: `ZipEntry` for representing archive contents, `ZipArchiveManager` for memory-efficient archive operations
+- **ViewModels**: `AppState` (@MainActor) for managing application state with async operations
+- **Views**: SwiftUI components with comprehensive keyboard navigation and accessibility support
+
+For detailed technical information, see [PROJECT_SUMMARY.md](PROJECT_SUMMARY.md)
 
 ## Dependencies
 
-- [ZIPFoundation](https://github.com/weichsel/ZIPFoundation): Robust zip archive handling
+- [ZIPFoundation](https://github.com/weichsel/ZIPFoundation) 0.9.0+: Memory-efficient zip archive handling with streaming support
 
 ## Contributing
 
