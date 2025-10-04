@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grizzly - Modern ZIP Viewer for macOS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+        }
+
+        .logo {
+            font-size: 72px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .tagline {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            margin-bottom: 30px;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: white;
+            color: #667eea;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .version {
+            margin-top: 15px;
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .main-content {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            margin: 40px auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .feature {
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            transition: transform 0.2s;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .feature h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .feature p {
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .requirements {
+            background: #f0f4ff;
+            padding: 30px;
+            border-radius: 12px;
+            margin: 40px 0;
+        }
+
+        .requirements h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .requirements ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .requirements li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .requirements li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .shortcuts {
+            margin: 40px 0;
+        }
+
+        .shortcuts h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .shortcut-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .shortcut {
+            background: #f8f9fa;
+            padding: 12px 15px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .key {
+            background: white;
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-weight: 600;
+            color: #667eea;
+            border: 1px solid #ddd;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: white;
+        }
+
+        footer a {
+            color: white;
+            text-decoration: none;
+            border-bottom: 1px solid white;
+        }
+
+        footer a:hover {
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .main-content {
+                padding: 30px 20px;
+            }
+
+            .logo {
+                font-size: 48px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">🐻</div>
+            <h1>Grizzly</h1>
+            <p class="tagline">A modern macOS application for viewing and extracting ZIP archives</p>
+            <a href="#" class="download-btn" id="downloadBtn">Download for macOS</a>
+            <p class="version">macOS 14.0 (Sonoma) or later</p>
+        </header>
+
+        <div class="main-content">
+            <h2 style="text-align: center; color: #667eea; margin-bottom: 40px;">Features</h2>
+
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">📁</div>
+                    <h3>Finder-like Browser</h3>
+                    <p>Navigate through ZIP contents with a familiar hierarchical tree view and breadcrumb navigation</p>
+                </div>
+
+                <div class="feature">
+                    <div class="feature-icon">👁️</div>
+                    <h3>Quick Look Preview</h3>
+                    <p>Press spacebar to preview files without extracting - images, PDFs, text files, and more</p>
+                </div>
+
+                <div class="feature">
+                    <div class="feature-icon">🔍</div>
+                    <h3>Search & Filter</h3>
+                    <p>Quickly find files and folders within the archive with recursive search</p>
+                </div>
+
+                <div class="feature">
+                    <div class="feature-icon">✨</div>
+                    <h3>Multiple Selection</h3>
+                    <p>Select and extract multiple files or folders at once with Cmd+Click and Shift+Click</p>
+                </div>
+
+                <div class="feature">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Memory Efficient</h3>
+                    <p>Handles large archives (GB+) efficiently - only metadata is kept in memory</p>
+                </div>
+
+                <div class="feature">
+                    <div class="feature-icon">⌨️</div>
+                    <h3>Keyboard Shortcuts</h3>
+                    <p>Full keyboard navigation support for power users</p>
+                </div>
+
+                <div class="feature">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Drag & Drop</h3>
+                    <p>Simply drag a ZIP file into the app to open it instantly</p>
+                </div>
+
+                <div class="feature">
+                    <div class="feature-icon">📊</div>
+                    <h3>File Details</h3>
+                    <p>View file sizes, compression ratios, modification dates, and more</p>
+                </div>
+            </div>
+
+            <div class="requirements">
+                <h2>System Requirements</h2>
+                <ul>
+                    <li>macOS 14.0 (Sonoma) or later</li>
+                    <li>64-bit Intel or Apple Silicon processor</li>
+                </ul>
+            </div>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+                <div class="shortcut-grid">
+                    <div class="shortcut">
+                        <span>Open ZIP file</span>
+                        <span class="key">⌘O</span>
+                    </div>
+                    <div class="shortcut">
+                        <span>Quick Look preview</span>
+                        <span class="key">Space</span>
+                    </div>
+                    <div class="shortcut">
+                        <span>Extract selected</span>
+                        <span class="key">⌘E</span>
+                    </div>
+                    <div class="shortcut">
+                        <span>Extract all</span>
+                        <span class="key">⌘⇧E</span>
+                    </div>
+                    <div class="shortcut">
+                        <span>Navigate up</span>
+                        <span class="key">⌘↑</span>
+                    </div>
+                    <div class="shortcut">
+                        <span>Navigate down</span>
+                        <span class="key">⌘↓</span>
+                    </div>
+                    <div class="shortcut">
+                        <span>Select all</span>
+                        <span class="key">⌘A</span>
+                    </div>
+                    <div class="shortcut">
+                        <span>Search</span>
+                        <span class="key">⌘F</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Built with SwiftUI for macOS</p>
+            <p style="margin-top: 10px;">
+                <a href="https://github.com/harshal2030/Grizzly" target="_blank">View on GitHub</a> |
+                <a href="https://github.com/harshal2030/Grizzly/issues" target="_blank">Report an Issue</a>
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Fetch the latest release from GitHub
+        async function getLatestRelease() {
+            try {
+                // Replace YOUR_USERNAME with your actual GitHub username
+                const response = await fetch('https://api.github.com/repos/harshal2030/Grizzly/releases/latest');
+                const data = await response.json();
+
+                // Find the DMG asset
+                const dmgAsset = data.assets.find(asset => asset.name.endsWith('.dmg'));
+
+                if (dmgAsset) {
+                    const downloadBtn = document.getElementById('downloadBtn');
+                    downloadBtn.href = dmgAsset.browser_download_url;
+
+                    // Update version text
+                    const versionElement = document.querySelector('.version');
+                    versionElement.innerHTML = `Version ${data.tag_name} | macOS 14.0 (Sonoma) or later`;
+                }
+            } catch (error) {
+                console.error('Error fetching latest release:', error);
+                // Fallback to releases page
+                document.getElementById('downloadBtn').href = 'https://github.com/YOUR_USERNAME/Grizzly/releases/latest';
+            }
+        }
+
+        // Load latest release on page load
+        getLatestRelease();
+    </script>
+</body>
+</html>
