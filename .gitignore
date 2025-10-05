@@ -1,7 +1,7 @@
 # Swift Package Manager
 .build/
 .swiftpm/
-
+.vscode/
 # macOS
 .DS_Store
 .AppleDouble
