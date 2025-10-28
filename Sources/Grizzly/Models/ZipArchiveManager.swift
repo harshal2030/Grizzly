@@ -4,12 +4,14 @@ import ZIPFoundation
 class ZipArchiveManager {
     private var archive: Archive?
     private var archiveURL: URL?
+    private(set) var isPasswordProtected: Bool = false
 
     enum ZipError: LocalizedError {
         case invalidArchive
         case fileNotFound
         case extractionFailed(String)
         case readFailed(String)
+        case passwordProtected
 
         var errorDescription: String? {
             switch self {
@@ -21,11 +23,110 @@ class ZipArchiveManager {
                 return "Extraction failed: \(message)"
             case .readFailed(let message):
                 return "Read failed: \(message)"
+            case .passwordProtected:
+                return "This archive is password protected and cannot be opened. WIP for password support."
             }
         }
     }
 
+    // MARK: - ZIP Metadata Detection
+
+    /// Detects if a ZIP archive is password protected by reading the Central Directory
+    private func detectPasswordProtection(at url: URL) throws -> Bool {
+        let fileHandle = try FileHandle(forReadingFrom: url)
+        defer { try? fileHandle.close() }
+
+        // Get file size
+        let fileSize = try fileHandle.seekToEnd()
+        guard fileSize > 22 else { return false } // Minimum ZIP file size
+
+        // Search for End of Central Directory Record in last 65KB
+        // (ZIP comment can be max 65535 bytes, plus 22 bytes for EOCD)
+        let searchStart = max(0, fileSize - 65536)
+        try fileHandle.seek(toOffset: UInt64(searchStart))
+        let data = fileHandle.readDataToEndOfFile()
+
+        // Find End of Central Directory signature: 0x06054b50 (little-endian)
+        let eocdSignature: UInt32 = 0x06054b50
+        guard let eocdOffset = findSignature(eocdSignature, in: data) else {
+            return false
+        }
+
+        // EOCD structure (after signature):
+        // 0-1: disk number
+        // 2-3: disk where central directory starts
+        // 4-5: number of central directory records on this disk
+        // 6-7: total number of central directory records
+        // 8-11: size of central directory
+        // 12-15: offset of start of central directory
+
+        let eocdData = data.advanced(by: eocdOffset)
+        guard eocdData.count >= 22 else { return false }
+
+        let totalEntries = eocdData.readUInt16(at: 10) // offset 10 from signature
+        let cdSize = eocdData.readUInt32(at: 12) // offset 12 from signature
+        let cdOffset = eocdData.readUInt32(at: 16) // offset 16 from signature
+
+        // Read Central Directory headers to check encryption flags
+        try fileHandle.seek(toOffset: UInt64(cdOffset))
+        let cdData = fileHandle.readData(ofLength: Int(cdSize))
+
+        return hasEncryptedEntries(in: cdData, count: Int(totalEntries))
+    }
+
+    /// Find a signature (4 bytes) in data, searching from end to beginning
+    private func findSignature(_ signature: UInt32, in data: Data) -> Int? {
+        let signatureBytes = withUnsafeBytes(of: signature.littleEndian) { Data($0) }
+
+        // Search backwards for better performance (EOCD is typically at the end)
+        for i in stride(from: data.count - 4, through: 0, by: -1) {
+            if data[i..<i+4] == signatureBytes {
+                return i
+            }
+        }
+        return nil
+    }
+
+    /// Check if any entries in the Central Directory have the encryption bit set
+    private func hasEncryptedEntries(in cdData: Data, count: Int) -> Bool {
+        var offset = 0
+        let cdSignature: UInt32 = 0x02014b50 // Central Directory header signature
+
+        for _ in 0..<count {
+            guard offset + 46 <= cdData.count else { break }
+
+            // Verify Central Directory signature
+            let signature = cdData.readUInt32(at: offset)
+            guard signature == cdSignature else { break }
+
+            // Read general purpose bit flag (offset 8 from signature)
+            let bitFlag = cdData.readUInt16(at: offset + 8)
+
+            // Bit 0: if set, file is encrypted
+            if (bitFlag & 0x0001) != 0 {
+                return true
+            }
+
+            // Move to next Central Directory header
+            // 46 = fixed size of Central Directory header
+            let fileNameLength = cdData.readUInt16(at: offset + 28)
+            let extraFieldLength = cdData.readUInt16(at: offset + 30)
+            let commentLength = cdData.readUInt16(at: offset + 32)
+
+            offset += 46 + Int(fileNameLength) + Int(extraFieldLength) + Int(commentLength)
+        }
+
+        return false
+    }
+
     func openArchive(at url: URL, progress: ((Double, Int) -> Void)? = nil) async throws -> [ZipEntry] {
+        // Check for password protection before opening
+        isPasswordProtected = try detectPasswordProtection(at: url)
+
+        if isPasswordProtected {
+            throw ZipError.passwordProtected
+        }
+
         let archive = try Archive(url: url, accessMode: .read)
 
         self.archive = archive
@@ -44,7 +145,7 @@ class ZipArchiveManager {
         let chunkSize = 1000 // Process in chunks of 1000 entries
 
         // First pass: create all entries with chunked processing
-        for entry in archive {
+        for entry: Entry in archive {
             let path = entry.path
             let name = (path as NSString).lastPathComponent
             let isDirectory = entry.type == .directory
@@ -222,5 +323,25 @@ class ZipArchiveManager {
     func closeArchive() {
         archive = nil
         archiveURL = nil
+    }
+}
+
+// MARK: - Data Reading Extensions
+
+extension Data {
+    /// Read a UInt16 at the specified offset (little-endian)
+    func readUInt16(at offset: Int) -> UInt16 {
+        guard offset + 2 <= count else { return 0 }
+        return withUnsafeBytes { bytes in
+            bytes.load(fromByteOffset: offset, as: UInt16.self)
+        }
+    }
+
+    /// Read a UInt32 at the specified offset (little-endian)
+    func readUInt32(at offset: Int) -> UInt32 {
+        guard offset + 4 <= count else { return 0 }
+        return withUnsafeBytes { bytes in
+            bytes.load(fromByteOffset: offset, as: UInt32.self)
+        }
     }
 }
