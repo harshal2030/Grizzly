@@ -10,7 +10,6 @@ class AppState: ObservableObject {
     @Published var errorMessage: String?
     @Published var showError: Bool = false
     @Published var currentZipURL: URL?
-    @Published var showFilePicker: Bool = false
     @Published var extractionProgress: Double = 0
     @Published var isExtracting: Bool = false
     @Published var extractionFileName: String = ""

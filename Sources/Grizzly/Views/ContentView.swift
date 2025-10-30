@@ -2,11 +2,13 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct ContentView: View {
+    let fileURL: URL
     @StateObject private var appState = AppState()
     @State private var showingDestinationPicker = false
     @State private var selectedDestinationURL: URL?
     @State private var isTargeted = false
     @FocusState private var searchFieldFocused: Bool
+    @Environment(\.openWindow) private var openWindow
 
     var body: some View {
         HStack(spacing: 0) {
@@ -35,13 +37,6 @@ struct ContentView: View {
         .toolbar {
             toolbarContent
         }
-        .fileImporter(
-            isPresented: $appState.showFilePicker,
-            allowedContentTypes: [UTType.zip],
-            allowsMultipleSelection: false
-        ) { result in
-            handleFileImport(result)
-        }
         .fileDialogURLSelection($selectedDestinationURL, $showingDestinationPicker) { url in
             if appState.selectedEntries.isEmpty {
                 appState.extractAll(to: url)
@@ -61,13 +56,9 @@ struct ContentView: View {
                 loadingOverlay
             }
         }
-        .onReceive(NotificationCenter.default.publisher(for: .openZipFile)) { _ in
-            appState.showFilePicker = true
-        }
-        .onReceive(NotificationCenter.default.publisher(for: .openZipFileWithURL)) { notification in
-            if let url = notification.object as? URL {
-                appState.openZipFile(at: url)
-            }
+        .onAppear {
+            // Load the zip file when the view appears
+            appState.openZipFile(at: fileURL)
         }
         .onDrop(of: [.fileURL], isTargeted: $isTargeted) { providers in
             handleDrop(providers: providers)
@@ -81,21 +72,15 @@ struct ContentView: View {
                 .font(.system(size: 64))
                 .foregroundColor(.secondary)
 
-            Text("No Zip File Opened")
+            Text("Loading Zip File...")
                 .font(.title2)
                 .fontWeight(.semibold)
 
-            Text("Drop a zip file here or click Open to get started")
+            Text("Drop another zip file here to open it in a new window")
                 .font(.body)
                 .foregroundColor(.secondary)
-
-            Button(action: {
-                appState.showFilePicker = true
-            }) {
-                Label("Open Zip File", systemImage: "folder.badge.plus")
-            }
-            .buttonStyle(.borderedProminent)
-            .controlSize(.large)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
@@ -221,14 +206,6 @@ struct ContentView: View {
 
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
-        ToolbarItem(placement: .navigation) {
-            Button(action: {
-                appState.showFilePicker = true
-            }) {
-                Label("Open", systemImage: "folder")
-            }
-        }
-
         ToolbarItem(placement: .primaryAction) {
             Button(action: {
                 showingDestinationPicker = true
@@ -236,18 +213,6 @@ struct ContentView: View {
                 Label("Extract", systemImage: "arrow.down.circle")
             }
             .disabled(appState.selectedEntries.isEmpty && appState.entries.isEmpty)
-        }
-    }
-
-    private func handleFileImport(_ result: Result<[URL], Error>) {
-        switch result {
-        case .success(let urls):
-            if let url = urls.first {
-                appState.openZipFile(at: url)
-            }
-        case .failure(let error):
-            appState.errorMessage = error.localizedDescription
-            appState.showError = true
         }
     }
 
@@ -261,8 +226,9 @@ struct ContentView: View {
                 return
             }
 
+            // Open the dropped file in a new window
             DispatchQueue.main.async {
-                appState.openZipFile(at: url)
+                openWindow(value: url)
             }
         }
 
