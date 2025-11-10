@@ -11,29 +11,38 @@ struct ContentView: View {
     @Environment(\.openWindow) private var openWindow
 
     var body: some View {
-        HStack(spacing: 0) {
-            // Left pane - always visible
-            VStack {
-                if appState.entries.isEmpty {
-                    emptyStateView
-                } else {
-                    ZipTreeView(entries: appState.filteredEntries, searchFieldFocused: $searchFieldFocused)
-                        .searchable(text: $appState.searchQuery, prompt: "Search files and folders")
-                        .environmentObject(appState)
+        ZStack {
+            // Background layer for drop highlight
+            if isTargeted {
+                Color.accentColor.opacity(0.1)
+                    .ignoresSafeArea()
+            }
+
+            // Main content
+            HStack(spacing: 0) {
+                // Left pane - always visible
+                VStack {
+                    if appState.entries.isEmpty {
+                        emptyStateView
+                    } else {
+                        ZipTreeView(entries: appState.filteredEntries, searchFieldFocused: $searchFieldFocused)
+                            .searchable(text: $appState.searchQuery, prompt: "Search files and folders")
+                            .environmentObject(appState)
+                    }
+                }
+                .frame(maxWidth: .infinity)
+
+                // Right pane - only visible when file/folder selected
+                if !appState.selectedEntries.isEmpty {
+                    Divider()
+
+                    detailView
+                        .frame(width: 350)
+                        .transition(.move(edge: .trailing))
                 }
             }
-            .frame(maxWidth: .infinity)
-
-            // Right pane - only visible when file/folder selected
-            if !appState.selectedEntries.isEmpty {
-                Divider()
-
-                detailView
-                    .frame(width: 350)
-                    .transition(.move(edge: .trailing))
-            }
+            .animation(.easeInOut(duration: 0.2), value: appState.selectedEntries.isEmpty)
         }
-        .animation(.easeInOut(duration: 0.2), value: appState.selectedEntries.isEmpty)
         .toolbar {
             toolbarContent
         }
@@ -63,7 +72,6 @@ struct ContentView: View {
         .onDrop(of: [.fileURL], isTargeted: $isTargeted) { providers in
             handleDrop(providers: providers)
         }
-        .background(isTargeted ? Color.accentColor.opacity(0.1) : Color.clear)
     }
 
     private var emptyStateView: some View {

@@ -1,5 +1,6 @@
 import SwiftUI
 import AppKit
+import UniformTypeIdentifiers
 
 @main
 struct GrizzlyApp: App {
@@ -134,22 +135,55 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 }
 
 struct EmptyDocumentView: View {
+    @Environment(\.openWindow) private var openWindow
+    @State private var isTargeted = false
+
     var body: some View {
-        VStack(spacing: 20) {
-            Image(systemName: "doc.zipper")
-                .font(.system(size: 64))
-                .foregroundColor(.secondary)
+        ZStack {
+            // Background layer for drop highlight
+            (isTargeted ? Color.accentColor.opacity(0.1) : Color.clear)
+                .ignoresSafeArea()
 
-            Text("No Zip File Opened")
-                .font(.title2)
-                .fontWeight(.semibold)
+            // Content
+            VStack(spacing: 20) {
+                Image(systemName: "doc.zipper")
+                    .font(.system(size: 64))
+                    .foregroundColor(.secondary)
 
-            Text("Use Cmd+O to open a zip file or drop one here")
-                .font(.body)
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal)
+                Text("No Zip File Opened")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+
+                Text("Use Cmd+O to open a zip file or drop one here")
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+            }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .frame(minWidth: 600, minHeight: 400)
+        .onDrop(of: [.fileURL], isTargeted: $isTargeted) { providers in
+            handleDrop(providers: providers)
+        }
+    }
+
+    private func handleDrop(providers: [NSItemProvider]) -> Bool {
+        guard let provider = providers.first else { return false }
+
+        provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) { item, error in
+            guard let data = item as? Data,
+                  let url = URL(dataRepresentation: data, relativeTo: nil),
+                  url.pathExtension.lowercased() == "zip" else {
+                return
+            }
+
+            // Open the dropped file in a new window
+            DispatchQueue.main.async {
+                openWindow(value: url)
+            }
+        }
+
+        return true
     }
 }
