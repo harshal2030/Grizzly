@@ -1,6 +1,10 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
+#if os(macOS)
+import AppKit
+#endif
+
 struct ContentView: View {
     let fileURL: URL
     @StateObject private var appState = AppState()
@@ -8,7 +12,9 @@ struct ContentView: View {
     @State private var selectedDestinationURL: URL?
     @State private var isTargeted = false
     @FocusState private var searchFieldFocused: Bool
+    #if os(macOS)
     @Environment(\.openWindow) private var openWindow
+    #endif
 
     var body: some View {
         ZStack {
@@ -69,9 +75,11 @@ struct ContentView: View {
             // Load the zip file when the view appears
             appState.openZipFile(at: fileURL)
         }
+        #if os(macOS)
         .onDrop(of: [.fileURL], isTargeted: $isTargeted) { providers in
             handleDrop(providers: providers)
         }
+        #endif
     }
 
     private var emptyStateView: some View {
@@ -224,6 +232,7 @@ struct ContentView: View {
         }
     }
 
+    #if os(macOS)
     private func handleDrop(providers: [NSItemProvider]) -> Bool {
         guard let provider = providers.first else { return false }
 
@@ -242,6 +251,7 @@ struct ContentView: View {
 
         return true
     }
+    #endif
 
     private func countAllItems(_ entries: [ZipEntry]) -> Int {
         var count = entries.count
@@ -254,60 +264,18 @@ struct ContentView: View {
 
 extension View {
     func fileDialogURLSelection(_ url: Binding<URL?>, _ isPresented: Binding<Bool>, onSelection: @escaping (URL) -> Void) -> some View {
-        self.sheet(isPresented: isPresented) {
-            FileDestinationPicker(selectedURL: url, onSelection: onSelection)
-        }
-    }
-}
-
-struct FileDestinationPicker: View {
-    @Binding var selectedURL: URL?
-    let onSelection: (URL) -> Void
-    @Environment(\.dismiss) private var dismiss
-
-    var body: some View {
-        VStack(spacing: 16) {
-            Text("Select Destination")
-                .font(.headline)
-
-            Button("Choose Folder...") {
-                let panel = NSOpenPanel()
-                panel.canChooseFiles = false
-                panel.canChooseDirectories = true
-                panel.allowsMultipleSelection = false
-                panel.canCreateDirectories = true
-
-                if panel.runModal() == .OK {
-                    selectedURL = panel.url
-                }
-            }
-            .buttonStyle(.bordered)
-
-            if let destination = selectedURL {
-                Text(destination.path)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    .lineLimit(2)
-            }
-
-            HStack {
-                Button("Cancel") {
-                    dismiss()
-                }
-                .buttonStyle(.bordered)
-
-                Button("Extract") {
-                    if let url = selectedURL {
-                        dismiss()
-                        onSelection(url)
-                    }
-                }
-                .buttonStyle(.borderedProminent)
-                .disabled(selectedURL == nil)
+        self.filePicker(
+            isPresented: isPresented,
+            selectedURL: url,
+            allowedTypes: [.folder],
+            allowsMultiple: false,
+            canChooseDirectories: true,
+            canChooseFiles: false
+        ) { pickedURL in
+            if let pickedURL = pickedURL {
+                onSelection(pickedURL)
             }
         }
-        .padding()
-        .frame(width: 400, height: 200)
     }
 }
 

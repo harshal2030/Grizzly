@@ -1,6 +1,6 @@
 # Grizzly
 
-A modern macOS application for viewing and extracting ZIP archives, built with SwiftUI.
+A modern cross-platform application for viewing and extracting ZIP archives, built with SwiftUI. Available for macOS and iOS/iPadOS.
 
 ## Features
 
@@ -16,7 +16,13 @@ A modern macOS application for viewing and extracting ZIP archives, built with S
 
 ## Requirements
 
+### macOS
 - macOS 14.0 (Sonoma) or later
+- Xcode 15.0 or later (for building from source)
+- Swift 5.9 or later
+
+### iOS/iPadOS
+- iOS/iPadOS 17.0 or later
 - Xcode 15.0 or later (for building from source)
 - Swift 5.9 or later
 
@@ -66,7 +72,18 @@ cp -r .build/release/Grizzly.app /Applications/  # Install to Applications
 ```bash
 open Package.swift
 # Then press Cmd+R to run
+# For iOS: Select an iOS destination in Xcode before building
 ```
+
+## Building for iOS/iPadOS
+
+See [IOS_BUILD_INSTRUCTIONS.md](IOS_BUILD_INSTRUCTIONS.md) for detailed instructions on building and deploying to iOS devices and simulators.
+
+Key differences on iOS/iPadOS:
+- Files extract to the app's Documents folder
+- Use document picker instead of drag & drop
+- Optimized touch interface
+- Share extracted files via iOS share sheet
 
 ## Usage
 

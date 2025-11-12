@@ -293,16 +293,25 @@ class ZipArchiveManager {
             throw ZipError.fileNotFound
         }
 
-        let finalDestination: URL
-        if entry.isDirectory {
-            finalDestination = destinationURL.appendingPathComponent(entry.name, isDirectory: true)
-        } else {
-            finalDestination = destinationURL.appendingPathComponent(entry.name)
-        }
-
         do {
-            let extractProgress = Progress(totalUnitCount: Int64(entry.uncompressedSize))
-            _ = try archive.extract(archiveEntry, to: finalDestination, skipCRC32: false, progress: extractProgress)
+            if entry.isDirectory {
+                // For directories, preserve the full path structure
+                let extractProgress = Progress(totalUnitCount: Int64(entry.uncompressedSize))
+                _ = try archive.extract(archiveEntry, to: destinationURL, skipCRC32: false, progress: extractProgress)
+            } else {
+                // For single files, extract directly without preserving internal zip path structure
+                // This avoids conflicts when the zip's internal path matches the destination folder name
+                let fileDestination = destinationURL.appendingPathComponent(entry.name)
+
+                // Read the file data
+                var fileData = Data()
+                _ = try archive.extract(archiveEntry, skipCRC32: false) { chunk in
+                    fileData.append(chunk)
+                }
+
+                // Write directly to destination with just the filename
+                try fileData.write(to: fileDestination)
+            }
 
             // Call progress callback if provided
             progress?(1.0)

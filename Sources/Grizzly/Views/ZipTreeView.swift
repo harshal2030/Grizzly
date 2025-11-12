@@ -1,6 +1,11 @@
 import SwiftUI
 import QuickLook
+
+#if os(macOS)
 import AppKit
+#elseif os(iOS)
+import UIKit
+#endif
 
 struct ZipTreeView: View {
     let entries: [ZipEntry]
@@ -10,6 +15,12 @@ struct ZipTreeView: View {
     @State private var showPreview = false
     @FocusState private var isFocused: Bool
     var searchFieldFocused: FocusState<Bool>.Binding
+
+    #if os(iOS)
+    @State private var showExtractionPicker = false
+    @State private var extractionDestination: URL?
+    @State private var pendingExtractionEntries: [ZipEntry] = []
+    #endif
 
     private var currentEntries: [ZipEntry] {
         let baseEntries: [ZipEntry]
@@ -39,6 +50,29 @@ struct ZipTreeView: View {
         }
         .quickLookPreview($previewURL)
         .contextMenu(forSelectionType: ZipEntry.self, menu: contextMenuContent, primaryAction: primaryActionHandler)
+        #if os(iOS)
+        .filePicker(
+            isPresented: $showExtractionPicker,
+            selectedURL: $extractionDestination,
+            allowedTypes: [.folder],
+            canChooseDirectories: true,
+            canChooseFiles: false,
+            onSelection: { url in
+                if let url = url {
+                    if pendingExtractionEntries.isEmpty {
+                        // Extract all
+                        appState.extractAll(to: url)
+                    } else {
+                        // Extract specific entries
+                        for entry in pendingExtractionEntries {
+                            appState.extractEntry(entry, to: url)
+                        }
+                    }
+                    pendingExtractionEntries.removeAll()
+                }
+            }
+        )
+        #endif
     }
 
     private var breadcrumbView: some View {
@@ -78,7 +112,7 @@ struct ZipTreeView: View {
         }
         .padding(.horizontal)
         .padding(.vertical, 8)
-        .background(Color(NSColor.controlBackgroundColor))
+        .background(Color.platformControlBackground)
     }
 
     private var fileListView: some View {
@@ -93,6 +127,7 @@ struct ZipTreeView: View {
                     FileRowContent(entry: entry)
                         .tag(entry)
                         .id(entry)
+                        #if os(macOS)
                         .gesture(
                             TapGesture()
                                 .modifiers(.command)
@@ -107,6 +142,7 @@ struct ZipTreeView: View {
                                     handleShiftClick(entry)
                                 }
                         )
+                        #endif
                 }
             }
             .listStyle(.sidebar)
@@ -145,13 +181,15 @@ struct ZipTreeView: View {
                 }
             }
 
+            #if os(macOS)
             Divider()
 
             Button("Show in Finder") {
                 if let url = appState.currentZipURL {
-                    NSWorkspace.shared.activateFileViewerSelecting([url])
+                    PlatformFileManager.revealFileInSystem(at: url)
                 }
             }
+            #endif
         } else if selection.count > 1 {
             Button("Extract \(selection.count) Items...") {
                 showExtractionDialog(for: Array(selection))
@@ -200,8 +238,14 @@ struct ZipTreeView: View {
                 try data.write(to: tempFile)
 
                 await MainActor.run {
+                    #if os(macOS)
                     // Open with default application
-                    _ = NSWorkspace.shared.open(tempFile)
+                    _ = PlatformFileManager.openFile(at: tempFile)
+                    #else
+                    // On iOS, we'll show a preview or share sheet
+                    // For now, just show the preview
+                    previewURL = tempFile
+                    #endif
                 }
             } catch {
                 await MainActor.run {
@@ -242,6 +286,7 @@ struct ZipTreeView: View {
     }
 
     private func showExtractionDialog(for entries: [ZipEntry]) {
+        #if os(macOS)
         let panel = NSOpenPanel()
         panel.canChooseFiles = false
         panel.canChooseDirectories = true
@@ -254,6 +299,11 @@ struct ZipTreeView: View {
                 appState.extractEntry(entry, to: url)
             }
         }
+        #else
+        // On iOS, show file picker to let user choose destination
+        pendingExtractionEntries = entries
+        showExtractionPicker = true
+        #endif
     }
 
     // MARK: - Keyboard Navigation Handlers
@@ -370,6 +420,7 @@ struct ZipTreeView: View {
     }
 
     private func handleExtractAll() {
+        #if os(macOS)
         let panel = NSOpenPanel()
         panel.canChooseFiles = false
         panel.canChooseDirectories = true
@@ -380,6 +431,11 @@ struct ZipTreeView: View {
         if panel.runModal() == .OK, let url = panel.url {
             appState.extractAll(to: url)
         }
+        #else
+        // On iOS, show file picker to let user choose destination
+        pendingExtractionEntries = []  // Empty means extract all
+        showExtractionPicker = true
+        #endif
     }
 
     enum ArrowDirection {

@@ -19,6 +19,7 @@ class AppState: ObservableObject {
     @Published var lastSelectedEntry: ZipEntry?
 
     private let archiveManager = ZipArchiveManager()
+    private var securityScopedURL: URL?
 
     var filteredEntries: [ZipEntry] {
         if searchQuery.isEmpty {
@@ -45,6 +46,18 @@ class AppState: ObservableObject {
     }
 
     func openZipFile(at url: URL) {
+        // Stop accessing previous security-scoped resource if any
+        #if os(iOS)
+        if let previousURL = securityScopedURL {
+            previousURL.stopAccessingSecurityScopedResource()
+        }
+        // Start accessing security-scoped resource for iOS
+        // This is required to read files from document picker
+        if url.startAccessingSecurityScopedResource() {
+            securityScopedURL = url
+        }
+        #endif
+
         isLoading = true
         errorMessage = nil
         showError = false
@@ -79,8 +92,22 @@ class AppState: ObservableObject {
         }
     }
 
+    deinit {
+        // Clean up security-scoped resource access
+        #if os(iOS)
+        if let url = securityScopedURL {
+            url.stopAccessingSecurityScopedResource()
+        }
+        #endif
+    }
+
     func extractSelected(to destinationURL: URL) {
         guard !selectedEntries.isEmpty else { return }
+
+        // Start accessing security-scoped resource for destination on iOS
+        #if os(iOS)
+        let accessing = destinationURL.startAccessingSecurityScopedResource()
+        #endif
 
         isExtracting = true
         extractionProgress = 0
@@ -108,10 +135,22 @@ class AppState: ObservableObject {
                     self.extractionProgress = 0
                 }
             }
+
+            // Stop accessing security-scoped resource on iOS
+            #if os(iOS)
+            if accessing {
+                destinationURL.stopAccessingSecurityScopedResource()
+            }
+            #endif
         }
     }
 
     func extractEntry(_ entry: ZipEntry, to destinationURL: URL) {
+        // Start accessing security-scoped resource for destination on iOS
+        #if os(iOS)
+        let accessing = destinationURL.startAccessingSecurityScopedResource()
+        #endif
+
         isExtracting = true
         extractionProgress = 0
         extractionFileName = entry.name
@@ -137,10 +176,22 @@ class AppState: ObservableObject {
                     self.extractionProgress = 0
                 }
             }
+
+            // Stop accessing security-scoped resource on iOS
+            #if os(iOS)
+            if accessing {
+                destinationURL.stopAccessingSecurityScopedResource()
+            }
+            #endif
         }
     }
 
     func extractAll(to destinationURL: URL) {
+        // Start accessing security-scoped resource for destination on iOS
+        #if os(iOS)
+        let accessing = destinationURL.startAccessingSecurityScopedResource()
+        #endif
+
         isExtracting = true
         extractionProgress = 0
 
@@ -166,6 +217,13 @@ class AppState: ObservableObject {
                     self.extractionProgress = 0
                 }
             }
+
+            // Stop accessing security-scoped resource on iOS
+            #if os(iOS)
+            if accessing {
+                destinationURL.stopAccessingSecurityScopedResource()
+            }
+            #endif
         }
     }
 
@@ -219,8 +277,6 @@ class AppState: ObservableObject {
 
     func copySelectedPaths() {
         let paths = selectedEntries.map { $0.path }.joined(separator: "\n")
-        let pasteboard = NSPasteboard.general
-        pasteboard.clearContents()
-        pasteboard.setString(paths, forType: .string)
+        PlatformPasteboard.copy(paths)
     }
 }

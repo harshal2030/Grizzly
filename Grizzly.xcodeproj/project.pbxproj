@@ -1,0 +1,543 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 63;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0016AA03AE73EB27CD8227F9 /* ZipEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F0E0A847348D3D340E1169 /* ZipEntry.swift */; };
+		1475777E31B7D4C051EBBE0C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD642EE3A3862B483DCE658E /* ContentView.swift */; };
+		1F9EE5FE6404E40C0EB0E24A /* ZipDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1304DC79D5BE581AF8C29D48 /* ZipDocument.swift */; };
+		26D3AB645BD4A49B853E19A4 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865BBCE33F6B7EE21699D5B5 /* AppState.swift */; };
+		43ED4A9B00CAA4FA32BF32D7 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 4FE13F1FCAE7E45C00FCA8AF /* ZIPFoundation */; };
+		490F9167131AE5637988392F /* ZipArchiveManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6D9E5B4CDBE513E4BECB54 /* ZipArchiveManager.swift */; };
+		5825B2F74C542D06D0C9787D /* GrizzlyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D5106F4D7190F04BF0F87AD /* GrizzlyApp.swift */; };
+		5C2DFAE5892587BA2A3846F2 /* GrizzlyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D5106F4D7190F04BF0F87AD /* GrizzlyApp.swift */; };
+		62BFD3385F720F810598273F /* ZipEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F0E0A847348D3D340E1169 /* ZipEntry.swift */; };
+		7BB82E8313D7F74F434FC557 /* ZipTreeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91ED674EFFAE42192837C7A2 /* ZipTreeView.swift */; };
+		9383C6256F1DFFF69EDBB4FE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD642EE3A3862B483DCE658E /* ContentView.swift */; };
+		9A516A4F0075665423F3D899 /* PlatformUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B1C82060670B0C0DAE5CE1 /* PlatformUtils.swift */; };
+		9D162FF2231E5971411C36E7 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = D4BE5B09CEB8AAFF58A8C09B /* ZIPFoundation */; };
+		9F23272B064F47AE623E90FC /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865BBCE33F6B7EE21699D5B5 /* AppState.swift */; };
+		C422B31B47857C5D61E648B6 /* ZipDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1304DC79D5BE581AF8C29D48 /* ZipDocument.swift */; };
+		D5920239DA8763CC02145AF5 /* ZipTreeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91ED674EFFAE42192837C7A2 /* ZipTreeView.swift */; };
+		E1B1BFE7C231BD6D986123A6 /* PlatformUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B1C82060670B0C0DAE5CE1 /* PlatformUtils.swift */; };
+		F4336B7B336D1AED5BA759B2 /* ZipArchiveManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6D9E5B4CDBE513E4BECB54 /* ZipArchiveManager.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1304DC79D5BE581AF8C29D48 /* ZipDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZipDocument.swift; sourceTree = "<group>"; };
+		192640E8E89B093347CC37FA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		19B1C82060670B0C0DAE5CE1 /* PlatformUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformUtils.swift; sourceTree = "<group>"; };
+		21F0E0A847348D3D340E1169 /* ZipEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZipEntry.swift; sourceTree = "<group>"; };
+		4D5106F4D7190F04BF0F87AD /* GrizzlyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrizzlyApp.swift; sourceTree = "<group>"; };
+		5B4F6845727C37914D1AB976 /* Grizzly-macOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "Grizzly-macOS.app"; path = Grizzly.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6C9539569A06BCB8817B48CE /* Grizzly.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Grizzly.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		865BBCE33F6B7EE21699D5B5 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		91ED674EFFAE42192837C7A2 /* ZipTreeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZipTreeView.swift; sourceTree = "<group>"; };
+		AD642EE3A3862B483DCE658E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		FF6D9E5B4CDBE513E4BECB54 /* ZipArchiveManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZipArchiveManager.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		208D6D66D52C422A7654444B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43ED4A9B00CAA4FA32BF32D7 /* ZIPFoundation in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7E760610FC57AC63E8B9C4BA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9D162FF2231E5971411C36E7 /* ZIPFoundation in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		25DECDD8BEC91D779CDBB66F /* Grizzly */ = {
+			isa = PBXGroup;
+			children = (
+				4D5106F4D7190F04BF0F87AD /* GrizzlyApp.swift */,
+				192640E8E89B093347CC37FA /* Info.plist */,
+				939C27E80797EB80B36C0F35 /* Models */,
+				EE1561F3C33F5BE512A59A11 /* Utilities */,
+				9582130201E356430DAF42BE /* ViewModels */,
+				75B7B13F210A1C35EB60A72F /* Views */,
+			);
+			name = Grizzly;
+			path = Sources/Grizzly;
+			sourceTree = "<group>";
+		};
+		2D50DA35AB41692D8072B983 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6C9539569A06BCB8817B48CE /* Grizzly.app */,
+				5B4F6845727C37914D1AB976 /* Grizzly-macOS.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		75B7B13F210A1C35EB60A72F /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				AD642EE3A3862B483DCE658E /* ContentView.swift */,
+				91ED674EFFAE42192837C7A2 /* ZipTreeView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		939C27E80797EB80B36C0F35 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				FF6D9E5B4CDBE513E4BECB54 /* ZipArchiveManager.swift */,
+				1304DC79D5BE581AF8C29D48 /* ZipDocument.swift */,
+				21F0E0A847348D3D340E1169 /* ZipEntry.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		9582130201E356430DAF42BE /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				865BBCE33F6B7EE21699D5B5 /* AppState.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		CE14468027A2410C937644D1 = {
+			isa = PBXGroup;
+			children = (
+				25DECDD8BEC91D779CDBB66F /* Grizzly */,
+				2D50DA35AB41692D8072B983 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		EE1561F3C33F5BE512A59A11 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				19B1C82060670B0C0DAE5CE1 /* PlatformUtils.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		72307D1856ACA50C47BE96D0 /* Grizzly-iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 065C388C887786BB0188C831 /* Build configuration list for PBXNativeTarget "Grizzly-iOS" */;
+			buildPhases = (
+				13D9669988135F8CB0E47D4F /* Sources */,
+				208D6D66D52C422A7654444B /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Grizzly-iOS";
+			packageProductDependencies = (
+				4FE13F1FCAE7E45C00FCA8AF /* ZIPFoundation */,
+			);
+			productName = "Grizzly-iOS";
+			productReference = 6C9539569A06BCB8817B48CE /* Grizzly.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A0D34675C6D705E5D10FD866 /* Grizzly-macOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B2F6DE747346CA626D66393D /* Build configuration list for PBXNativeTarget "Grizzly-macOS" */;
+			buildPhases = (
+				111DD7E3031B620800F03526 /* Sources */,
+				7E760610FC57AC63E8B9C4BA /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Grizzly-macOS";
+			packageProductDependencies = (
+				D4BE5B09CEB8AAFF58A8C09B /* ZIPFoundation */,
+			);
+			productName = "Grizzly-macOS";
+			productReference = 5B4F6845727C37914D1AB976 /* Grizzly-macOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		9661FF6F24A800808EFB9A80 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					72307D1856ACA50C47BE96D0 = {
+						ProvisioningStyle = Automatic;
+					};
+					A0D34675C6D705E5D10FD866 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = EC7642DE315C49359FB86CC7 /* Build configuration list for PBXProject "Grizzly" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = CE14468027A2410C937644D1;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				AF43A3B852215C8DBE261ACB /* XCRemoteSwiftPackageReference "ZIPFoundation" */,
+			);
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				72307D1856ACA50C47BE96D0 /* Grizzly-iOS */,
+				A0D34675C6D705E5D10FD866 /* Grizzly-macOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		111DD7E3031B620800F03526 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				26D3AB645BD4A49B853E19A4 /* AppState.swift in Sources */,
+				9383C6256F1DFFF69EDBB4FE /* ContentView.swift in Sources */,
+				5825B2F74C542D06D0C9787D /* GrizzlyApp.swift in Sources */,
+				9A516A4F0075665423F3D899 /* PlatformUtils.swift in Sources */,
+				490F9167131AE5637988392F /* ZipArchiveManager.swift in Sources */,
+				1F9EE5FE6404E40C0EB0E24A /* ZipDocument.swift in Sources */,
+				62BFD3385F720F810598273F /* ZipEntry.swift in Sources */,
+				D5920239DA8763CC02145AF5 /* ZipTreeView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		13D9669988135F8CB0E47D4F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9F23272B064F47AE623E90FC /* AppState.swift in Sources */,
+				1475777E31B7D4C051EBBE0C /* ContentView.swift in Sources */,
+				5C2DFAE5892587BA2A3846F2 /* GrizzlyApp.swift in Sources */,
+				E1B1BFE7C231BD6D986123A6 /* PlatformUtils.swift in Sources */,
+				F4336B7B336D1AED5BA759B2 /* ZipArchiveManager.swift in Sources */,
+				C422B31B47857C5D61E648B6 /* ZipDocument.swift in Sources */,
+				0016AA03AE73EB27CD8227F9 /* ZipEntry.swift in Sources */,
+				7BB82E8313D7F74F434FC557 /* ZipTreeView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		03687761938BE0EDAADA1323 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CODE_SIGN_ENTITLEMENTS = Grizzly.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = Sources/Grizzly/Info.plist;
+				INFOPLIST_KEY_CFBundleDocumentTypes = "<array>\n  <dict>\n    <key>CFBundleTypeExtensions</key>\n    <array>\n      <string>zip</string>\n    </array>\n    <key>CFBundleTypeName</key>\n    <string>ZIP Archive</string>\n    <key>CFBundleTypeRole</key>\n    <string>Viewer</string>\n    <key>LSHandlerRank</key>\n    <string>Owner</string>\n    <key>LSItemContentTypes</key>\n    <array>\n      <string>public.zip-archive</string>\n    </array>\n  </dict>\n</array>\n";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2024 Grizzly. All rights reserved.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.grizzly.ZipViewer;
+				PRODUCT_NAME = Grizzly;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		1B19FC21404919CC455AB2EE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 577V58ZKB7;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = Sources/Grizzly/Info.plist;
+				INFOPLIST_KEY_CFBundleDocumentTypes = "<array>\n  <dict>\n    <key>CFBundleTypeExtensions</key>\n    <array>\n      <string>zip</string>\n    </array>\n    <key>CFBundleTypeName</key>\n    <string>ZIP Archive</string>\n    <key>CFBundleTypeRole</key>\n    <string>Viewer</string>\n    <key>LSHandlerRank</key>\n    <string>Owner</string>\n    <key>LSItemContentTypes</key>\n    <array>\n      <string>public.zip-archive</string>\n    </array>\n  </dict>\n</array>\n";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportsDocumentBrowser = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.grizzly.ZipViewer;
+				PRODUCT_NAME = Grizzly;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		28F992C25FBDFF0D0135DFF3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CODE_SIGN_ENTITLEMENTS = Grizzly.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = Sources/Grizzly/Info.plist;
+				INFOPLIST_KEY_CFBundleDocumentTypes = "<array>\n  <dict>\n    <key>CFBundleTypeExtensions</key>\n    <array>\n      <string>zip</string>\n    </array>\n    <key>CFBundleTypeName</key>\n    <string>ZIP Archive</string>\n    <key>CFBundleTypeRole</key>\n    <string>Viewer</string>\n    <key>LSHandlerRank</key>\n    <string>Owner</string>\n    <key>LSItemContentTypes</key>\n    <array>\n      <string>public.zip-archive</string>\n    </array>\n  </dict>\n</array>\n";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2024 Grizzly. All rights reserved.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.grizzly.ZipViewer;
+				PRODUCT_NAME = Grizzly;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		D4CDF71874C75955806259DF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 577V58ZKB7;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = Sources/Grizzly/Info.plist;
+				INFOPLIST_KEY_CFBundleDocumentTypes = "<array>\n  <dict>\n    <key>CFBundleTypeExtensions</key>\n    <array>\n      <string>zip</string>\n    </array>\n    <key>CFBundleTypeName</key>\n    <string>ZIP Archive</string>\n    <key>CFBundleTypeRole</key>\n    <string>Viewer</string>\n    <key>LSHandlerRank</key>\n    <string>Owner</string>\n    <key>LSItemContentTypes</key>\n    <array>\n      <string>public.zip-archive</string>\n    </array>\n  </dict>\n</array>\n";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportsDocumentBrowser = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.grizzly.ZipViewer;
+				PRODUCT_NAME = Grizzly;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E347986528F3D0683A61E5B3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Grizzly;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		F6849476399DFA6F0A6B2185 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Grizzly;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		065C388C887786BB0188C831 /* Build configuration list for PBXNativeTarget "Grizzly-iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D4CDF71874C75955806259DF /* Debug */,
+				1B19FC21404919CC455AB2EE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		B2F6DE747346CA626D66393D /* Build configuration list for PBXNativeTarget "Grizzly-macOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				03687761938BE0EDAADA1323 /* Debug */,
+				28F992C25FBDFF0D0135DFF3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		EC7642DE315C49359FB86CC7 /* Build configuration list for PBXProject "Grizzly" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E347986528F3D0683A61E5B3 /* Debug */,
+				F6849476399DFA6F0A6B2185 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		AF43A3B852215C8DBE261ACB /* XCRemoteSwiftPackageReference "ZIPFoundation" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/weichsel/ZIPFoundation.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.9.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4FE13F1FCAE7E45C00FCA8AF /* ZIPFoundation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AF43A3B852215C8DBE261ACB /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
+			productName = ZIPFoundation;
+		};
+		D4BE5B09CEB8AAFF58A8C09B /* ZIPFoundation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AF43A3B852215C8DBE261ACB /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
+			productName = ZIPFoundation;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 9661FF6F24A800808EFB9A80 /* Project object */;
+}
