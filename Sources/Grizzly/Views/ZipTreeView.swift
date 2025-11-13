@@ -175,13 +175,13 @@ struct ZipTreeView: View {
                 showExtractionDialog(for: [entry])
             }
 
+            #if os(macOS)
             if !entry.isDirectory {
                 Button("Quick Look") {
                     handleSpacebarPreview()
                 }
             }
 
-            #if os(macOS)
             Divider()
 
             Button("Show in Finder") {
