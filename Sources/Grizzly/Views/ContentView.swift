@@ -38,7 +38,8 @@ struct ContentView: View {
                 }
                 .frame(maxWidth: .infinity)
 
-                // Right pane - only visible when file/folder selected
+                #if os(macOS)
+                // Right pane - only visible when file/folder selected (macOS only)
                 if !appState.selectedEntries.isEmpty {
                     Divider()
 
@@ -46,6 +47,7 @@ struct ContentView: View {
                         .frame(width: 350)
                         .transition(.move(edge: .trailing))
                 }
+                #endif
             }
             .animation(.easeInOut(duration: 0.2), value: appState.selectedEntries.isEmpty)
         }

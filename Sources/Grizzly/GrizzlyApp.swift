@@ -209,6 +209,7 @@ struct IOSContentView: View {
                 }
             }
         }
+        .navigationViewStyle(.stack)
         .sheet(isPresented: $showingFilePicker) {
             FilePickerIOS(
                 selectedURL: $selectedZipURL,
