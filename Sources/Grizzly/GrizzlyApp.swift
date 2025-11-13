@@ -1,10 +1,16 @@
 import SwiftUI
-import AppKit
 import UniformTypeIdentifiers
+
+#if os(macOS)
+import AppKit
+#endif
 
 @main
 struct GrizzlyApp: App {
+    #if os(macOS)
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    #endif
+
     @State private var pendingURLs: [URL] = []
 
     init() {
@@ -12,6 +18,7 @@ struct GrizzlyApp: App {
     }
 
     var body: some Scene {
+        #if os(macOS)
         WindowGroup(for: URL.self) { $fileURL in
             WindowContentView(fileURL: $fileURL, appDelegate: appDelegate)
         }
@@ -24,9 +31,15 @@ struct GrizzlyApp: App {
             }
         }
         .defaultSize(width: 800, height: 600)
+        #else
+        WindowGroup {
+            IOSContentView()
+        }
+        #endif
     }
 }
 
+#if os(macOS)
 struct WindowContentView: View {
     @Binding var fileURL: URL?
     @Environment(\.openWindow) private var openWindow
@@ -83,25 +96,6 @@ struct WindowAccessor: NSViewRepresentable {
     }
 
     func updateNSView(_ nsView: NSView, context: Context) {}
-}
-
-class ZipFileOpener {
-    static let shared = ZipFileOpener()
-    var openWindow: ((URL) -> Void)?
-
-    func openZipFile() {
-        let panel = NSOpenPanel()
-        panel.canChooseFiles = true
-        panel.canChooseDirectories = false
-        panel.allowsMultipleSelection = true
-        panel.allowedContentTypes = [.zip]
-
-        if panel.runModal() == .OK {
-            for url in panel.urls {
-                openWindow?(url)
-            }
-        }
-    }
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -185,5 +179,107 @@ struct EmptyDocumentView: View {
         }
 
         return true
+    }
+}
+#endif
+
+// iOS-specific content view
+#if os(iOS)
+struct IOSContentView: View {
+    @State private var selectedZipURL: URL?
+    @State private var showingFilePicker = false
+
+    var body: some View {
+        NavigationView {
+            Group {
+                if let zipURL = selectedZipURL {
+                    ContentView(fileURL: zipURL)
+                } else {
+                    IOSEmptyView(showingFilePicker: $showingFilePicker)
+                }
+            }
+            .navigationTitle("Grizzly")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        showingFilePicker = true
+                    }) {
+                        Label("Open", systemImage: "folder")
+                    }
+                }
+            }
+        }
+        .navigationViewStyle(.stack)
+        .sheet(isPresented: $showingFilePicker) {
+            FilePickerIOS(
+                selectedURL: $selectedZipURL,
+                allowedTypes: [.zip],
+                canChooseDirectories: false
+            ) { url in
+                if let url = url {
+                    selectedZipURL = url
+                }
+            }
+        }
+        .onOpenURL { url in
+            // Handle "Open With" on iOS - set the URL to open the zip file
+            if url.pathExtension.lowercased() == "zip" {
+                selectedZipURL = url
+            }
+        }
+    }
+}
+
+struct IOSEmptyView: View {
+    @Binding var showingFilePicker: Bool
+
+    var body: some View {
+        VStack(spacing: 20) {
+            Image(systemName: "doc.zipper")
+                .font(.system(size: 64))
+                .foregroundColor(.secondary)
+
+            Text("No Zip File Opened")
+                .font(.title2)
+                .fontWeight(.semibold)
+
+            Text("Tap the folder icon to open a zip file")
+                .font(.body)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal)
+
+            Button(action: {
+                showingFilePicker = true
+            }) {
+                Label("Open Zip File", systemImage: "folder")
+                    .font(.headline)
+            }
+            .buttonStyle(.borderedProminent)
+            .controlSize(.large)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+}
+#endif
+
+class ZipFileOpener {
+    static let shared = ZipFileOpener()
+    var openWindow: ((URL) -> Void)?
+
+    func openZipFile() {
+        #if os(macOS)
+        let panel = NSOpenPanel()
+        panel.canChooseFiles = true
+        panel.canChooseDirectories = false
+        panel.allowsMultipleSelection = true
+        panel.allowedContentTypes = [.zip]
+
+        if panel.runModal() == .OK {
+            for url in panel.urls {
+                openWindow?(url)
+            }
+        }
+        #endif
     }
 }
