@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grizzly - Modern ZIP Viewer for macOS</title>
+    <title>Grizzly - The ZIP Viewer Your Mac Deserves</title>
     <style>
         * {
             margin: 0;
@@ -14,9 +14,139 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #1d1d1f;
+            background: #000;
             min-height: 100vh;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="60" height="60" xmlns="http://www.w3.org/2000/svg"><rect width="60" height="60" fill="none"/><path d="M0 30h60M30 0v60" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            text-align: center;
+            color: white;
+            padding: 40px 20px;
+            max-width: 1000px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            font-size: 90px;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+            letter-spacing: -2px;
+        }
+
+        .hero-tagline {
+            font-size: 1.6rem;
+            opacity: 0.95;
+            margin-bottom: 25px;
+            font-weight: 400;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.85;
+            margin-bottom: 40px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: white;
+            color: #667eea;
+            padding: 18px 45px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.2rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+        }
+
+        .github-btn {
+            display: inline-block;
+            background: transparent;
+            color: white;
+            padding: 18px 45px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.2rem;
+            border: 2px solid white;
+            transition: all 0.2s;
+        }
+
+        .github-btn:hover {
+            background: white;
+            color: #667eea;
+            transform: translateY(-3px);
+        }
+
+        .version {
+            margin-top: 20px;
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        .platform-badges {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .badge {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(10px);
         }
 
         .container {
@@ -25,266 +155,386 @@
             padding: 20px;
         }
 
-        header {
+        .section {
+            background: white;
+            padding: 80px 20px;
+        }
+
+        .section.dark {
+            background: #f5f5f7;
+        }
+
+        .section-title {
             text-align: center;
-            padding: 60px 20px;
-            color: white;
-        }
-
-        .logo {
-            font-size: 72px;
+            font-size: 2.5rem;
             margin-bottom: 20px;
-        }
-
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 15px;
+            color: #1d1d1f;
             font-weight: 700;
         }
 
-        .tagline {
+        .section-subtitle {
+            text-align: center;
             font-size: 1.3rem;
-            opacity: 0.95;
-            margin-bottom: 30px;
+            color: #6e6e73;
+            margin-bottom: 60px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .download-btn {
-            display: inline-block;
-            background: white;
-            color: #667eea;
-            padding: 15px 40px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 60px 0;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .download-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-        }
-
-        .version {
-            margin-top: 15px;
-            opacity: 0.9;
-            font-size: 0.9rem;
-        }
-
-        .main-content {
-            background: white;
+        .comparison-box {
+            padding: 40px;
             border-radius: 20px;
-            padding: 50px;
-            margin: 40px auto;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .comparison-box.before {
+            background: #fff1f0;
+            border: 2px solid #ffccc7;
+        }
+
+        .comparison-box.after {
+            background: #f0f9ff;
+            border: 2px solid #91d5ff;
+        }
+
+        .comparison-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .comparison-box h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .comparison-box ul {
+            text-align: left;
+            list-style: none;
+            padding: 0;
+        }
+
+        .comparison-box.before ul li::before {
+            content: "❌ ";
+            margin-right: 8px;
+        }
+
+        .comparison-box.after ul li::before {
+            content: "✅ ";
+            margin-right: 8px;
+        }
+
+        .comparison-box ul li {
+            padding: 8px 0;
+            font-size: 1.05rem;
+            color: #424245;
         }
 
         .features {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
             margin: 40px 0;
         }
 
         .feature {
-            padding: 25px;
-            background: #f8f9fa;
-            border-radius: 12px;
-            transition: transform 0.2s;
+            padding: 35px;
+            background: white;
+            border-radius: 16px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
         }
 
         .feature:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
         }
 
         .feature-icon {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
+            font-size: 3rem;
+            margin-bottom: 20px;
         }
 
         .feature h3 {
             color: #667eea;
-            margin-bottom: 10px;
-            font-size: 1.3rem;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            font-weight: 600;
         }
 
         .feature p {
-            color: #666;
-            line-height: 1.5;
+            color: #6e6e73;
+            line-height: 1.6;
+            font-size: 1.05rem;
         }
 
-        .requirements {
-            background: #f0f4ff;
-            padding: 30px;
-            border-radius: 12px;
-            margin: 40px 0;
+        .highlight-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 40px;
+            border-radius: 24px;
+            text-align: center;
+            margin: 60px 0;
         }
 
-        .requirements h2 {
-            color: #667eea;
-            margin-bottom: 15px;
+        .highlight-box h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
         }
 
-        .requirements ul {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .requirements li {
-            padding: 8px 0;
-            padding-left: 25px;
-            position: relative;
-        }
-
-        .requirements li:before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            color: #667eea;
-            font-weight: bold;
+        .highlight-box p {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            margin-bottom: 30px;
         }
 
         .shortcuts {
-            margin: 40px 0;
+            margin: 60px 0;
         }
 
         .shortcuts h2 {
-            color: #667eea;
-            margin-bottom: 20px;
+            color: #1d1d1f;
+            margin-bottom: 40px;
             text-align: center;
+            font-size: 2rem;
         }
 
         .shortcut-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
         }
 
         .shortcut {
-            background: #f8f9fa;
-            padding: 12px 15px;
-            border-radius: 8px;
+            background: white;
+            padding: 18px 24px;
+            border-radius: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: transform 0.2s;
+        }
+
+        .shortcut:hover {
+            transform: translateX(5px);
         }
 
         .key {
-            background: white;
-            padding: 4px 10px;
-            border-radius: 5px;
+            background: #f5f5f7;
+            padding: 8px 14px;
+            border-radius: 8px;
             font-family: monospace;
             font-weight: 600;
             color: #667eea;
-            border: 1px solid #ddd;
+            border: 1px solid #e8e8ed;
+            font-size: 0.95rem;
         }
 
         footer {
+            background: #000;
             text-align: center;
-            padding: 40px 20px;
-            color: white;
+            padding: 60px 20px;
+            color: #a1a1a6;
         }
 
         footer a {
-            color: white;
+            color: #fff;
             text-decoration: none;
-            border-bottom: 1px solid white;
+            transition: opacity 0.2s;
         }
 
         footer a:hover {
-            opacity: 0.8;
+            opacity: 0.7;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
         }
 
         @media (max-width: 768px) {
             h1 {
-                font-size: 2rem;
+                font-size: 2.5rem;
             }
 
-            .main-content {
-                padding: 30px 20px;
+            .hero-tagline {
+                font-size: 1.3rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+
+            .comparison {
+                grid-template-columns: 1fr;
             }
 
             .logo {
-                font-size: 48px;
+                font-size: 60px;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .cta-group {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .download-btn, .github-btn {
+                width: 100%;
+                max-width: 300px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
+    <div class="hero">
+        <div class="hero-content">
             <div class="logo">🐻</div>
             <h1>Grizzly</h1>
-            <p class="tagline">A modern macOS application for viewing and extracting ZIP archives</p>
-            <a href="#" class="download-btn" id="downloadBtn">Download for macOS</a>
-            <p class="version">macOS 14.0 (Sonoma) or later</p>
-        </header>
+            <p class="hero-tagline">The ZIP Viewer Your Mac Deserves</p>
+            <p class="hero-subtitle">Stop wrestling with ZIPs. Browse, preview, and extract files with the simplicity of Finder—but built for archives.</p>
 
-        <div class="main-content">
-            <h2 style="text-align: center; color: #667eea; margin-bottom: 40px;">Features</h2>
+            <div class="cta-group">
+                <a href="#" class="download-btn" id="downloadBtn">Download for Mac</a>
+                <a href="https://github.com/harshal2030/Grizzly" class="github-btn" target="_blank">View on GitHub</a>
+            </div>
+
+            <p class="version">Free & Open Source • macOS 14+ (Sonoma or later)</p>
+
+            <div class="platform-badges">
+                <span class="badge">🖥️ macOS</span>
+                <span class="badge">📱 iOS</span>
+                <span class="badge">💻 Apple Silicon & Intel</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="container">
+            <h2 class="section-title">Finally, ZIP Files That Just Work</h2>
+            <p class="section-subtitle">No more double-clicking to extract everything. No more mystery folders cluttering your Downloads.</p>
+
+            <div class="comparison">
+                <div class="comparison-box before">
+                    <div class="comparison-icon">😤</div>
+                    <h3>Before Grizzly</h3>
+                    <ul>
+                        <li>Extract everything to see one file</li>
+                        <li>Clutter your Downloads folder</li>
+                        <li>No preview—extract first, regret later</li>
+                        <li>Multiple clicks for simple tasks</li>
+                        <li>One ZIP at a time</li>
+                    </ul>
+                </div>
+                <div class="comparison-box after">
+                    <div class="comparison-icon">😊</div>
+                    <h3>With Grizzly</h3>
+                    <ul>
+                        <li>Browse inside like a normal folder</li>
+                        <li>Extract only what you need</li>
+                        <li>Preview with Spacebar—instantly</li>
+                        <li>Drag, drop, done</li>
+                        <li>Work with multiple archives</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section dark">
+        <div class="container">
+            <h2 class="section-title">Familiar, Yet Powerful</h2>
+            <p class="section-subtitle">If you know how to use Finder, you already know how to use Grizzly</p>
 
             <div class="features">
                 <div class="feature">
-                    <div class="feature-icon">📁</div>
-                    <h3>Finder-like Browser</h3>
-                    <p>Navigate through ZIP contents with a familiar hierarchical tree view and breadcrumb navigation</p>
+                    <div class="feature-icon">🎯</div>
+                    <h3>Drag & Drop Simple</h3>
+                    <p>Drop a ZIP on Grizzly and start browsing. No menus, no fuss. It just works.</p>
                 </div>
 
                 <div class="feature">
                     <div class="feature-icon">👁️</div>
-                    <h3>Quick Look Preview</h3>
-                    <p>Press spacebar to preview files without extracting - images, PDFs, text files, and more</p>
+                    <h3>Quick Look Everything</h3>
+                    <p>Hit Spacebar to preview images, PDFs, text files, and more—without extracting a single byte.</p>
+                </div>
+
+                <div class="feature">
+                    <div class="feature-icon">📁</div>
+                    <h3>Browse Like Finder</h3>
+                    <p>Navigate folders, use breadcrumbs, and feel right at home with a familiar macOS interface.</p>
                 </div>
 
                 <div class="feature">
                     <div class="feature-icon">🔍</div>
-                    <h3>Search & Filter</h3>
-                    <p>Quickly find files and folders within the archive with recursive search</p>
-                </div>
-
-                <div class="feature">
-                    <div class="feature-icon">✨</div>
-                    <h3>Multiple Selection</h3>
-                    <p>Select and extract multiple files or folders at once with Cmd+Click and Shift+Click</p>
+                    <h3>Find Files Fast</h3>
+                    <p>Search through thousands of files instantly. No need to extract everything first.</p>
                 </div>
 
                 <div class="feature">
                     <div class="feature-icon">⚡</div>
-                    <h3>Memory Efficient</h3>
-                    <p>Handles large archives (GB+) efficiently - only metadata is kept in memory</p>
+                    <h3>Lightning Fast</h3>
+                    <p>Handles multi-gigabyte archives efficiently. Only loads what you need, when you need it.</p>
                 </div>
 
                 <div class="feature">
                     <div class="feature-icon">⌨️</div>
-                    <h3>Keyboard Shortcuts</h3>
-                    <p>Full keyboard navigation support for power users</p>
+                    <h3>Keyboard Power User</h3>
+                    <p>Full keyboard navigation with shortcuts. Arrow keys, multi-select, and all the shortcuts you expect.</p>
                 </div>
 
                 <div class="feature">
-                    <div class="feature-icon">🎯</div>
-                    <h3>Drag & Drop</h3>
-                    <p>Simply drag a ZIP file into the app to open it instantly</p>
+                    <div class="feature-icon">🪟</div>
+                    <h3>Multi-Window Support</h3>
+                    <p>Work with multiple ZIP files side by side. Each archive in its own window.</p>
                 </div>
 
                 <div class="feature">
-                    <div class="feature-icon">📊</div>
-                    <h3>File Details</h3>
-                    <p>View file sizes, compression ratios, modification dates, and more</p>
+                    <div class="feature-icon">✨</div>
+                    <h3>Smart Selection</h3>
+                    <p>Extract exactly what you need. Select files, folders, or everything—your choice.</p>
+                </div>
+
+                <div class="feature">
+                    <div class="feature-icon">📱</div>
+                    <h3>Works on iPhone & iPad</h3>
+                    <p>Same great experience on iOS with touch-optimized interface and native file handling.</p>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <div class="requirements">
-                <h2>System Requirements</h2>
-                <ul>
-                    <li>macOS 14.0 (Sonoma) or later</li>
-                    <li>64-bit Intel or Apple Silicon processor</li>
-                </ul>
+    <div class="section">
+        <div class="container">
+            <div class="highlight-box">
+                <h2>Built with Modern macOS in Mind</h2>
+                <p>Native SwiftUI. Optimized for Apple Silicon. Designed for macOS Sonoma and beyond.</p>
+                <a href="#" class="download-btn" id="downloadBtn2" style="background: white; color: #667eea;">Download Now</a>
             </div>
 
             <div class="shortcuts">
-                <h2>Keyboard Shortcuts</h2>
+                <h2>Keyboard Shortcuts for Power Users</h2>
+                <p style="text-align: center; color: #6e6e73; margin-bottom: 30px; font-size: 1.1rem;">Navigate like a pro—every action is just a keystroke away</p>
+
+                <h3 style="color: #667eea; margin-top: 40px; margin-bottom: 20px; font-size: 1.3rem;">File Operations</h3>
                 <div class="shortcut-grid">
                     <div class="shortcut">
                         <span>Open ZIP file</span>
@@ -295,6 +545,10 @@
                         <span class="key">Space</span>
                     </div>
                     <div class="shortcut">
+                        <span>Open file/Enter folder</span>
+                        <span class="key">Return</span>
+                    </div>
+                    <div class="shortcut">
                         <span>Extract selected</span>
                         <span class="key">⌘E</span>
                     </div>
@@ -303,61 +557,91 @@
                         <span class="key">⌘⇧E</span>
                     </div>
                     <div class="shortcut">
-                        <span>Navigate up</span>
+                        <span>Search files</span>
+                        <span class="key">⌘F</span>
+                    </div>
+                </div>
+
+                <h3 style="color: #667eea; margin-top: 40px; margin-bottom: 20px; font-size: 1.3rem;">Navigation</h3>
+                <div class="shortcut-grid">
+                    <div class="shortcut">
+                        <span>Move up/down items</span>
+                        <span class="key">↑ / ↓</span>
+                    </div>
+                    <div class="shortcut">
+                        <span>Navigate to parent folder</span>
                         <span class="key">⌘↑</span>
                     </div>
                     <div class="shortcut">
-                        <span>Navigate down</span>
+                        <span>Enter selected folder</span>
                         <span class="key">⌘↓</span>
                     </div>
+                    <div class="shortcut">
+                        <span>Go back</span>
+                        <span class="key">Delete / ⌫</span>
+                    </div>
+                </div>
+
+                <h3 style="color: #667eea; margin-top: 40px; margin-bottom: 20px; font-size: 1.3rem;">Selection</h3>
+                <div class="shortcut-grid">
                     <div class="shortcut">
                         <span>Select all</span>
                         <span class="key">⌘A</span>
                     </div>
                     <div class="shortcut">
-                        <span>Search</span>
-                        <span class="key">⌘F</span>
+                        <span>Range select</span>
+                        <span class="key">⇧↑ / ⇧↓</span>
+                    </div>
+                    <div class="shortcut">
+                        <span>Toggle selection</span>
+                        <span class="key">⌘Click</span>
+                    </div>
+                    <div class="shortcut">
+                        <span>Clear selection</span>
+                        <span class="key">Esc</span>
+                    </div>
+                    <div class="shortcut">
+                        <span>Copy file paths</span>
+                        <span class="key">⌘C</span>
                     </div>
                 </div>
             </div>
         </div>
-
-        <footer>
-            <p>Built with SwiftUI for macOS</p>
-            <p style="margin-top: 10px;">
-                <a href="https://github.com/harshal2030/Grizzly" target="_blank">View on GitHub</a> |
-                <a href="https://github.com/harshal2030/Grizzly/issues" target="_blank">Report an Issue</a>
-            </p>
-        </footer>
     </div>
 
+    <footer>
+        <div class="footer-links">
+            <a href="https://github.com/harshal2030/Grizzly" target="_blank">GitHub</a>
+            <a href="https://github.com/harshal2030/Grizzly/releases" target="_blank">Releases</a>
+            <a href="https://github.com/harshal2030/Grizzly/issues" target="_blank">Report Issue</a>
+        </div>
+        <p>Built with ❤️ using SwiftUI • Free & Open Source (MIT License)</p>
+    </footer>
+
     <script>
-        // Fetch the latest release from GitHub
         async function getLatestRelease() {
             try {
-                // Replace YOUR_USERNAME with your actual GitHub username
                 const response = await fetch('https://api.github.com/repos/harshal2030/Grizzly/releases/latest');
                 const data = await response.json();
 
-                // Find the DMG asset
                 const dmgAsset = data.assets.find(asset => asset.name.endsWith('.dmg'));
 
                 if (dmgAsset) {
                     const downloadBtn = document.getElementById('downloadBtn');
+                    const downloadBtn2 = document.getElementById('downloadBtn2');
                     downloadBtn.href = dmgAsset.browser_download_url;
+                    downloadBtn2.href = dmgAsset.browser_download_url;
 
-                    // Update version text
                     const versionElement = document.querySelector('.version');
-                    versionElement.innerHTML = `Version ${data.tag_name} | macOS 14.0 (Sonoma) or later`;
+                    versionElement.innerHTML = `Free & Open Source • Version ${data.tag_name} • macOS 14+ (Sonoma or later)`;
                 }
             } catch (error) {
                 console.error('Error fetching latest release:', error);
-                // Fallback to releases page
-                document.getElementById('downloadBtn').href = 'https://github.com/YOUR_USERNAME/Grizzly/releases/latest';
+                document.getElementById('downloadBtn').href = 'https://github.com/harshal2030/Grizzly/releases/latest';
+                document.getElementById('downloadBtn2').href = 'https://github.com/harshal2030/Grizzly/releases/latest';
             }
         }
 
-        // Load latest release on page load
         getLatestRelease();
     </script>
 </body>
