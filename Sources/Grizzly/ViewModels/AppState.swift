@@ -275,6 +275,12 @@ class AppState: ObservableObject {
         focusedEntry = entry
     }
 
+    func selectSingleForNavigation(_ entry: ZipEntry) {
+        selectedEntries = [entry]
+        focusedEntry = entry
+        // Don't update lastSelectedEntry - preserve anchor for shift+arrow
+    }
+
     func copySelectedPaths() {
         let paths = selectedEntries.map { $0.path }.joined(separator: "\n")
         PlatformPasteboard.copy(paths)

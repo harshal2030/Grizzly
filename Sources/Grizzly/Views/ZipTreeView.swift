@@ -121,6 +121,11 @@ struct ZipTreeView: View {
                 get: { appState.selectedEntries },
                 set: { newSelection in
                     appState.selectedEntries = newSelection
+                    // Update anchor and focus when selection changes via click
+                    if newSelection.count == 1, let selectedEntry = newSelection.first {
+                        appState.lastSelectedEntry = selectedEntry
+                        appState.focusedEntry = selectedEntry
+                    }
                 }
             )) {
                 ForEach(currentEntries, id: \.self) { entry in
@@ -325,13 +330,13 @@ struct ZipTreeView: View {
 
             if newIndex != currentIndex {
                 let newEntry = currentEntries[newIndex]
-                appState.selectSingle(newEntry)
+                appState.selectSingleForNavigation(newEntry)
                 scrollProxy.scrollTo(newEntry, anchor: nil)
             }
         } else {
             // No selection, select first item
             let firstEntry = currentEntries[0]
-            appState.selectSingle(firstEntry)
+            appState.selectSingle(firstEntry)  // Set anchor on initial selection
             scrollProxy.scrollTo(firstEntry, anchor: nil)
         }
     }
@@ -339,29 +344,44 @@ struct ZipTreeView: View {
     private func handleShiftArrow(direction: ArrowDirection, scrollProxy: ScrollViewProxy) {
         guard !currentEntries.isEmpty else { return }
 
-        let anchor = appState.lastSelectedEntry ?? appState.selectedEntries.first
-        let focused = appState.focusedEntry ?? appState.selectedEntries.first
-
-        if let anchor = anchor, let focused = focused,
-           let focusedIndex = currentEntries.firstIndex(of: focused) {
-            let newIndex: Int
-            switch direction {
-            case .up:
-                newIndex = max(0, focusedIndex - 1)
-            case .down:
-                newIndex = min(currentEntries.count - 1, focusedIndex + 1)
+        // Initialize anchor if needed
+        if appState.lastSelectedEntry == nil {
+            let initialEntry = appState.selectedEntries.first ?? currentEntries[0]
+            appState.lastSelectedEntry = initialEntry
+            appState.focusedEntry = initialEntry
+            if appState.selectedEntries.isEmpty {
+                appState.selectedEntries.insert(initialEntry)
             }
+        }
 
-            if newIndex != focusedIndex {
-                let newEntry = currentEntries[newIndex]
-                appState.focusedEntry = newEntry
-                appState.selectedEntries.removeAll()
-                appState.selectRange(from: anchor, to: newEntry, in: currentEntries)
-                scrollProxy.scrollTo(newEntry, anchor: nil)
-            }
-        } else if let first = currentEntries.first {
+        guard let anchor = appState.lastSelectedEntry,
+              currentEntries.contains(anchor) else {
+            // Anchor not in current entries, reset to first item
+            let first = currentEntries.first!
             appState.selectSingle(first)
             scrollProxy.scrollTo(first, anchor: nil)
+            return
+        }
+
+        let focused = appState.focusedEntry ?? anchor
+        guard let focusedIndex = currentEntries.firstIndex(of: focused) else { return }
+
+        let newIndex: Int
+        switch direction {
+        case .up:
+            newIndex = max(0, focusedIndex - 1)
+        case .down:
+            newIndex = min(currentEntries.count - 1, focusedIndex + 1)
+        }
+
+        if newIndex != focusedIndex {
+            let newEntry = currentEntries[newIndex]
+            appState.focusedEntry = newEntry
+
+            // Clear and rebuild selection from anchor to new position
+            appState.selectedEntries.removeAll()
+            appState.selectRange(from: anchor, to: newEntry, in: currentEntries)
+            scrollProxy.scrollTo(newEntry, anchor: nil)
         }
     }
 
