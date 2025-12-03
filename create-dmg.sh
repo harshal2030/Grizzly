@@ -104,7 +104,7 @@ rm -f "$TEMP_DMG"
 rm -rf "$DMG_TMP"
 
 # Sign the DMG if CODESIGN_IDENTITY is set
-if [ -n "$CODESIGN_IDENTITY" ] && [ "$CODESIGN_IDENTITY" != "-" ]; then
+if [ -n "$CODESIGN_IDENTITY" ] && [ "$CODESIGN_IDENTITY" != "-" ] && [ "$CODESIGN_IDENTITY" != "auto" ]; then
     echo "🔏 Signing DMG..."
     codesign --sign "$CODESIGN_IDENTITY" --timestamp "$DMG_NAME"
     echo "✅ DMG signed!"
@@ -127,13 +127,44 @@ if [ -n "$CODESIGN_IDENTITY" ] && [ "$CODESIGN_IDENTITY" != "-" ]; then
     else
         echo "⚠️  Notarization skipped. Set NOTARIZE_APPLE_ID, NOTARIZE_PASSWORD, and NOTARIZE_TEAM_ID to notarize."
     fi
-elif [ "$CODESIGN_IDENTITY" = "-" ]; then
-    echo "⚠️  DMG not signed (ad-hoc signing detected)"
 else
-    echo "⚠️  DMG not signed. Set CODESIGN_IDENTITY to sign the DMG."
+    echo "ℹ️  DMG not signed (app bundle contains ad-hoc signature)"
 fi
 
 echo "✅ DMG created successfully: $DMG_NAME"
+echo ""
+
+# Check signing status and provide guidance
+if [ -n "$CODESIGN_IDENTITY" ] && [ "$CODESIGN_IDENTITY" != "-" ] && [ "$CODESIGN_IDENTITY" != "auto" ]; then
+    if [ -n "$NOTARIZE_APPLE_ID" ] && [ -n "$NOTARIZE_PASSWORD" ] && [ -n "$NOTARIZE_TEAM_ID" ]; then
+        echo "✅ Your DMG is signed and notarized!"
+        echo "   Users can install it without any warnings."
+    else
+        echo "⚠️  Your DMG is signed but NOT notarized."
+        echo "   Users will see: \"cannot be opened because the developer cannot be verified\""
+        echo "   They'll need to right-click → Open to bypass Gatekeeper."
+        echo ""
+        echo "   To notarize, set these environment variables:"
+        echo "   export NOTARIZE_APPLE_ID=\"your@email.com\""
+        echo "   export NOTARIZE_PASSWORD=\"app-specific-password\""
+        echo "   export NOTARIZE_TEAM_ID=\"YOUR_TEAM_ID\""
+        echo "   See CODESIGNING.md for details."
+    fi
+else
+    echo "ℹ️  Ad-hoc signed app (recommended for open source distribution)"
+    echo "   Users will see: \"cannot be opened because the developer cannot be verified\""
+    echo ""
+    echo "   Installation steps for users:"
+    echo "   1. Try to open Grizzly (will show warning)"
+    echo "   2. Go to System Settings → Privacy & Security"
+    echo "   3. Click 'Open Anyway' button"
+    echo "   4. Click 'Open' to confirm"
+    echo ""
+    echo "   Alternative: Right-click Grizzly.app → Open → Open"
+    echo ""
+    echo "   See INSTALLATION.md for detailed user instructions."
+fi
+
 echo ""
 echo "You can now:"
 echo "  - Test it: open $DMG_NAME"

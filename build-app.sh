@@ -122,7 +122,7 @@ cat > "$APP_DIR/Contents/Info.plist" << EOF
 EOF
 
 # Code signing
-if [ -n "$CODESIGN_IDENTITY" ]; then
+if [ -n "$CODESIGN_IDENTITY" ] && [ "$CODESIGN_IDENTITY" != "auto" ]; then
     echo "🔏 Signing app with identity: $CODESIGN_IDENTITY"
 
     # Sign the executable first
@@ -161,12 +161,16 @@ if [ -n "$CODESIGN_IDENTITY" ]; then
 
     echo "✅ Code signing complete!"
 else
-    echo "⚠️  Warning: CODESIGN_IDENTITY not set. App will not be signed."
-    echo "   To sign the app, set CODESIGN_IDENTITY environment variable:"
-    echo "   export CODESIGN_IDENTITY=\"Developer ID Application: Your Name (TEAM_ID)\""
+    # Use ad-hoc signing by default - gives users "Open Anyway" option
+    echo "🔏 Applying ad-hoc signature (allows 'Open Anyway' in System Settings)..."
+    codesign --force --sign "-" --deep "$APP_DIR"
+
+    echo "✅ Ad-hoc signing complete!"
     echo ""
-    echo "   For ad-hoc signing (local use only):"
-    echo "   export CODESIGN_IDENTITY=\"-\""
+    echo "ℹ️  Users will be able to open via System Settings → Privacy & Security → Open Anyway"
+    echo ""
+    echo "   For proper distribution without warnings, set CODESIGN_IDENTITY:"
+    echo "   export CODESIGN_IDENTITY=\"Developer ID Application: Your Name (TEAM_ID)\""
 fi
 
 echo "✅ Build complete!"
