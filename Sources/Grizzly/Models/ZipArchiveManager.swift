@@ -299,9 +299,12 @@ class ZipArchiveManager {
                 let extractProgress = Progress(totalUnitCount: Int64(entry.uncompressedSize))
                 _ = try archive.extract(archiveEntry, to: destinationURL, skipCRC32: false, progress: extractProgress)
             } else {
-                // For single files, extract directly without preserving internal zip path structure
-                // This avoids conflicts when the zip's internal path matches the destination folder name
-                let fileDestination = destinationURL.appendingPathComponent(entry.name)
+                // For single files, preserve the full path from the zip
+                let fileDestination = destinationURL.appendingPathComponent(entry.path)
+
+                // Create parent directories if needed
+                let parentDirectory = fileDestination.deletingLastPathComponent()
+                try FileManager.default.createDirectory(at: parentDirectory, withIntermediateDirectories: true, attributes: nil)
 
                 // Read the file data
                 var fileData = Data()
@@ -309,7 +312,7 @@ class ZipArchiveManager {
                     fileData.append(chunk)
                 }
 
-                // Write directly to destination with just the filename
+                // Write to destination with full path
                 try fileData.write(to: fileDestination)
             }
 

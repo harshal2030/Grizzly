@@ -103,6 +103,36 @@ hdiutil convert "$TEMP_DMG" -format UDZO -imagekey zlib-level=9 -o "$DMG_NAME"
 rm -f "$TEMP_DMG"
 rm -rf "$DMG_TMP"
 
+# Sign the DMG if CODESIGN_IDENTITY is set
+if [ -n "$CODESIGN_IDENTITY" ] && [ "$CODESIGN_IDENTITY" != "-" ]; then
+    echo "🔏 Signing DMG..."
+    codesign --sign "$CODESIGN_IDENTITY" --timestamp "$DMG_NAME"
+    echo "✅ DMG signed!"
+
+    # Notarize if credentials are provided
+    if [ -n "$NOTARIZE_APPLE_ID" ] && [ -n "$NOTARIZE_PASSWORD" ] && [ -n "$NOTARIZE_TEAM_ID" ]; then
+        echo "📮 Submitting DMG for notarization..."
+        echo "This may take a few minutes..."
+
+        xcrun notarytool submit "$DMG_NAME" \
+            --apple-id "$NOTARIZE_APPLE_ID" \
+            --password "$NOTARIZE_PASSWORD" \
+            --team-id "$NOTARIZE_TEAM_ID" \
+            --wait
+
+        echo "📎 Stapling notarization ticket to DMG..."
+        xcrun stapler staple "$DMG_NAME"
+
+        echo "✅ DMG notarized and stapled!"
+    else
+        echo "⚠️  Notarization skipped. Set NOTARIZE_APPLE_ID, NOTARIZE_PASSWORD, and NOTARIZE_TEAM_ID to notarize."
+    fi
+elif [ "$CODESIGN_IDENTITY" = "-" ]; then
+    echo "⚠️  DMG not signed (ad-hoc signing detected)"
+else
+    echo "⚠️  DMG not signed. Set CODESIGN_IDENTITY to sign the DMG."
+fi
+
 echo "✅ DMG created successfully: $DMG_NAME"
 echo ""
 echo "You can now:"

@@ -36,6 +36,12 @@ if [ -f "AppIcon.icns" ]; then
     cp "AppIcon.icns" "$APP_DIR/Contents/Resources/"
 fi
 
+# Copy entitlements if they exist
+if [ -f "Grizzly.entitlements" ]; then
+    echo "📋 Found entitlements file..."
+    ENTITLEMENTS_PATH="Grizzly.entitlements"
+fi
+
 # Create Info.plist
 cat > "$APP_DIR/Contents/Info.plist" << EOF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -114,6 +120,54 @@ cat > "$APP_DIR/Contents/Info.plist" << EOF
 </dict>
 </plist>
 EOF
+
+# Code signing
+if [ -n "$CODESIGN_IDENTITY" ]; then
+    echo "🔏 Signing app with identity: $CODESIGN_IDENTITY"
+
+    # Sign the executable first
+    if [ -n "$ENTITLEMENTS_PATH" ]; then
+        codesign --force --sign "$CODESIGN_IDENTITY" \
+            --entitlements "$ENTITLEMENTS_PATH" \
+            --options runtime \
+            --timestamp \
+            "$APP_DIR/Contents/MacOS/$APP_NAME"
+    else
+        codesign --force --sign "$CODESIGN_IDENTITY" \
+            --options runtime \
+            --timestamp \
+            "$APP_DIR/Contents/MacOS/$APP_NAME"
+    fi
+
+    # Sign the entire app bundle
+    if [ -n "$ENTITLEMENTS_PATH" ]; then
+        codesign --force --sign "$CODESIGN_IDENTITY" \
+            --entitlements "$ENTITLEMENTS_PATH" \
+            --options runtime \
+            --timestamp \
+            --deep \
+            "$APP_DIR"
+    else
+        codesign --force --sign "$CODESIGN_IDENTITY" \
+            --options runtime \
+            --timestamp \
+            --deep \
+            "$APP_DIR"
+    fi
+
+    # Verify the signature
+    echo "🔍 Verifying code signature..."
+    codesign --verify --verbose "$APP_DIR"
+
+    echo "✅ Code signing complete!"
+else
+    echo "⚠️  Warning: CODESIGN_IDENTITY not set. App will not be signed."
+    echo "   To sign the app, set CODESIGN_IDENTITY environment variable:"
+    echo "   export CODESIGN_IDENTITY=\"Developer ID Application: Your Name (TEAM_ID)\""
+    echo ""
+    echo "   For ad-hoc signing (local use only):"
+    echo "   export CODESIGN_IDENTITY=\"-\""
+fi
 
 echo "✅ Build complete!"
 echo ""

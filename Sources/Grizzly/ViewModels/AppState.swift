@@ -145,45 +145,45 @@ class AppState: ObservableObject {
         }
     }
 
-    func extractEntry(_ entry: ZipEntry, to destinationURL: URL) {
+    func extractEntry(_ entry: ZipEntry, to destinationURL: URL) async {
         // Start accessing security-scoped resource for destination on iOS
         #if os(iOS)
         let accessing = destinationURL.startAccessingSecurityScopedResource()
         #endif
 
-        isExtracting = true
-        extractionProgress = 0
-        extractionFileName = entry.name
-
-        Task {
-            do {
-                try archiveManager.extractEntry(entry, to: destinationURL) { progress in
-                    Task { @MainActor in
-                        self.extractionProgress = progress
-                    }
-                }
-
-                await MainActor.run {
-                    self.isExtracting = false
-                    self.extractionProgress = 0
-                    self.extractionFileName = ""
-                }
-            } catch {
-                await MainActor.run {
-                    self.errorMessage = error.localizedDescription
-                    self.showError = true
-                    self.isExtracting = false
-                    self.extractionProgress = 0
-                }
-            }
-
-            // Stop accessing security-scoped resource on iOS
-            #if os(iOS)
-            if accessing {
-                destinationURL.stopAccessingSecurityScopedResource()
-            }
-            #endif
+        await MainActor.run {
+            isExtracting = true
+            extractionProgress = 0
+            extractionFileName = entry.name
         }
+
+        do {
+            try archiveManager.extractEntry(entry, to: destinationURL) { progress in
+                Task { @MainActor in
+                    self.extractionProgress = progress
+                }
+            }
+
+            await MainActor.run {
+                self.isExtracting = false
+                self.extractionProgress = 0
+                self.extractionFileName = ""
+            }
+        } catch {
+            await MainActor.run {
+                self.errorMessage = error.localizedDescription
+                self.showError = true
+                self.isExtracting = false
+                self.extractionProgress = 0
+            }
+        }
+
+        // Stop accessing security-scoped resource on iOS
+        #if os(iOS)
+        if accessing {
+            destinationURL.stopAccessingSecurityScopedResource()
+        }
+        #endif
     }
 
     func extractAll(to destinationURL: URL) {

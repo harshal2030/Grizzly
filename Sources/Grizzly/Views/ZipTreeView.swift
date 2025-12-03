@@ -64,8 +64,10 @@ struct ZipTreeView: View {
                         appState.extractAll(to: url)
                     } else {
                         // Extract specific entries
-                        for entry in pendingExtractionEntries {
-                            appState.extractEntry(entry, to: url)
+                        Task {
+                            for entry in pendingExtractionEntries {
+                                await appState.extractEntry(entry, to: url)
+                            }
                         }
                     }
                     pendingExtractionEntries.removeAll()
@@ -300,8 +302,10 @@ struct ZipTreeView: View {
         panel.prompt = "Extract"
 
         if panel.runModal() == .OK, let url = panel.url {
-            for entry in entries {
-                appState.extractEntry(entry, to: url)
+            Task {
+                for entry in entries {
+                    await appState.extractEntry(entry, to: url)
+                }
             }
         }
         #else

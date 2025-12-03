@@ -134,6 +134,9 @@ struct FilePickerMacOS: View {
 
                 if panel.runModal() == .OK {
                     selectedURL = panel.url
+                    // Immediately trigger the selection callback and dismiss
+                    onSelection(selectedURL)
+                    dismiss()
                 }
             }
             .buttonStyle(.bordered)
