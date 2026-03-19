@@ -15,7 +15,7 @@ swift build -c release --arch arm64 --arch x86_64
 # Create app bundle structure
 APP_NAME="Grizzly"
 APP_BUNDLE="$APP_NAME.app"
-BUILD_DIR=".build/release"
+BUILD_DIR=".build/apple/Products/Release"
 APP_DIR="$BUILD_DIR/$APP_BUNDLE"
 
 echo "📦 Creating app bundle structure..."
