@@ -7,7 +7,7 @@ set -e
 APP_NAME="Grizzly"
 VERSION="${VERSION:-1.0.0}"
 DMG_NAME="${APP_NAME}-${VERSION}.dmg"
-APP_PATH=".build/release/${APP_NAME}.app"
+APP_PATH=".build/apple/Products/Release/${APP_NAME}.app"
 DMG_TMP="dmg_tmp"
 VOLUME_NAME="${APP_NAME}"
 

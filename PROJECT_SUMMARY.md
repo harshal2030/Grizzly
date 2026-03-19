@@ -164,7 +164,7 @@ swift run
 ### Build macOS App Bundle
 ```bash
 ./build-app.sh
-open .build/release/Grizzly.app
+open .build/apple/Products/Release/Grizzly.app
 ```
 
 This creates a complete `.app` bundle with:

@@ -74,19 +74,19 @@ The project includes a build script that creates a complete `.app` bundle:
 
 This will:
 - Build the release binary
-- Create the app bundle structure at `.build/release/Grizzly.app`
+- Create the app bundle structure at `.build/apple/Products/Release/Grizzly.app`
 - Include the custom app icon (AppIcon.icns)
 - Configure file associations for .zip files
 - Set up proper Info.plist with bundle identifier `com.grizzly.ZipViewer`
 
 To run the app:
 ```bash
-open .build/release/Grizzly.app
+open .build/apple/Products/Release/Grizzly.app
 ```
 
 To install to Applications:
 ```bash
-cp -r .build/release/Grizzly.app /Applications/
+cp -r .build/apple/Products/Release/Grizzly.app /Applications/
 ```
 
 ### Option B: Build DMG Installer
@@ -99,7 +99,7 @@ To create a distributable DMG installer:
 
 This will:
 - Build the release app bundle
-- Create a DMG installer at `.build/release/Grizzly-{version}.dmg`
+- Create a DMG installer at `.build/apple/Products/Release/Grizzly-{version}.dmg`
 - Include a customized DMG with installation instructions
 
 **Note**: For distribution outside the Mac App Store, you'll need to code sign the app with your Apple Developer certificate.

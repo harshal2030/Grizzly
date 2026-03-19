@@ -28,12 +28,12 @@
 
 2. **Run the app:**
    ```bash
-   open .build/release/Grizzly.app
+   open .build/apple/Products/Release/Grizzly.app
    ```
 
 3. **Optional - Install to Applications:**
    ```bash
-   cp -r .build/release/Grizzly.app /Applications/
+   cp -r .build/apple/Products/Release/Grizzly.app /Applications/
    ```
 
 This creates a proper macOS app with:

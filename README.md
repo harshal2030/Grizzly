@@ -55,16 +55,16 @@ swift run
 ./build-app.sh
 ```
 
-This creates a full `.app` bundle at `.build/release/Grizzly.app` with:
+This creates a full `.app` bundle at `.build/apple/Products/Release/Grizzly.app` with:
 - Custom app icon
 - File associations for .zip files
 - Proper bundle structure for distribution
 
 To install:
 ```bash
-open .build/release/Grizzly.app  # Run the app
+open .build/apple/Products/Release/Grizzly.app  # Run the app
 # or
-cp -r .build/release/Grizzly.app /Applications/  # Install to Applications
+cp -r .build/apple/Products/Release/Grizzly.app /Applications/  # Install to Applications
 ```
 
 ### Build with Xcode
