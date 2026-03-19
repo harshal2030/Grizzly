@@ -10,7 +10,7 @@ echo "🔨 Building Grizzly.app..."
 cd "$(dirname "$0")"
 
 # Build the release binary
-swift build -c release
+swift build -c release --arch arm64 --arch x86_64
 
 # Create app bundle structure
 APP_NAME="Grizzly"
@@ -90,7 +90,7 @@ cat > "$APP_DIR/Contents/Info.plist" << EOF
             </array>
         </dict>
     </array>
-    <key>UTExportedTypeDeclarations</key>
+    <key>UTImportedTypeDeclarations</key>
     <array>
         <dict>
             <key>UTTypeIdentifier</key>
@@ -145,13 +145,11 @@ if [ -n "$CODESIGN_IDENTITY" ] && [ "$CODESIGN_IDENTITY" != "auto" ]; then
             --entitlements "$ENTITLEMENTS_PATH" \
             --options runtime \
             --timestamp \
-            --deep \
             "$APP_DIR"
     else
         codesign --force --sign "$CODESIGN_IDENTITY" \
             --options runtime \
             --timestamp \
-            --deep \
             "$APP_DIR"
     fi
 
@@ -163,7 +161,8 @@ if [ -n "$CODESIGN_IDENTITY" ] && [ "$CODESIGN_IDENTITY" != "auto" ]; then
 else
     # Use ad-hoc signing by default - gives users "Open Anyway" option
     echo "🔏 Applying ad-hoc signature (allows 'Open Anyway' in System Settings)..."
-    codesign --force --sign "-" --deep "$APP_DIR"
+    codesign --force --sign "-" "$APP_DIR/Contents/MacOS/$APP_NAME"
+    codesign --force --sign "-" "$APP_DIR"
 
     echo "✅ Ad-hoc signing complete!"
     echo ""

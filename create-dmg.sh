@@ -44,8 +44,8 @@ hdiutil create -volname "$VOLUME_NAME" \
 # Mount the temporary DMG
 echo "Mounting temporary DMG..."
 MOUNT_OUTPUT=$(hdiutil attach -readwrite -noverify -noautoopen "$TEMP_DMG")
-MOUNT_DIR=$(echo "$MOUNT_OUTPUT" | grep -E '^/dev/' | sed 1q | awk '{print $NF}')
-DEVICE=$(echo "$MOUNT_OUTPUT" | grep -E '^/dev/' | sed 1q | awk '{print $1}')
+DEVICE=$(echo "$MOUNT_OUTPUT" | grep -E '^/dev/' | head -1 | awk '{print $1}')
+MOUNT_DIR="/Volumes/$VOLUME_NAME"
 
 # Wait for mount
 sleep 2
@@ -66,7 +66,6 @@ if [ -z "$CI" ]; then
                set icon size of viewOptions to 128
                set position of item "'${APP_NAME}'.app" of container window to {125, 150}
                set position of item "Applications" of container window to {375, 150}
-               set background picture of viewOptions to file ".background:background.png"
                update without registering applications
                delay 2
          end tell
@@ -89,10 +88,10 @@ fi
 sleep 3
 
 # Double-check nothing is still mounted
-hdiutil info | grep -q "$TEMP_DMG" && {
-    hdiutil detach -all -force || true
+if hdiutil info | grep -q "$TEMP_DMG" && [ -n "$DEVICE" ]; then
+    hdiutil detach "$DEVICE" -force 2>/dev/null || true
     sleep 2
-}
+fi
 
 # Convert to final compressed DMG
 echo "Creating final compressed DMG..."

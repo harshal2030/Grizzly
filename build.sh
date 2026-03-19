@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# Build script for ZipViewer macOS app
+# Build script for Grizzly macOS app
 
 set -e
 
-echo "🔨 Building ZipViewer..."
+echo "🔨 Building Grizzly..."
 
 # Navigate to the project directory
 cd "$(dirname "$0")"
