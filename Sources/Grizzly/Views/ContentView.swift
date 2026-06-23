@@ -128,7 +128,7 @@ struct ContentView: View {
                 .foregroundColor(.secondary)
 
             Button(action: {
-                showingDestinationPicker = true
+                startExtraction()
             }) {
                 Label("Extract Selected", systemImage: "arrow.down.circle")
             }
@@ -159,7 +159,7 @@ struct ContentView: View {
                 .foregroundColor(.secondary)
 
             Button(action: {
-                showingDestinationPicker = true
+                startExtraction()
             }) {
                 Label("Extract All", systemImage: "arrow.down.circle")
             }
@@ -226,7 +226,7 @@ struct ContentView: View {
     private var toolbarContent: some ToolbarContent {
         ToolbarItem(placement: .primaryAction) {
             Button(action: {
-                showingDestinationPicker = true
+                startExtraction()
             }) {
                 Label("Extract", systemImage: "arrow.down.circle")
             }
@@ -254,6 +254,34 @@ struct ContentView: View {
         return true
     }
     #endif
+
+    /// Begin extraction. On macOS this opens the native folder picker directly
+    /// (no intermediate sheet); on iOS it presents the system document picker.
+    /// Once a destination is chosen, extraction starts immediately and progress
+    /// is shown via the extraction overlay.
+    private func startExtraction() {
+        #if os(macOS)
+        let panel = NSOpenPanel()
+        panel.canChooseFiles = false
+        panel.canChooseDirectories = true
+        panel.allowsMultipleSelection = false
+        panel.canCreateDirectories = true
+        panel.prompt = "Extract"
+        panel.message = appState.selectedEntries.isEmpty
+            ? "Choose where to extract all files"
+            : "Choose where to extract the selected items"
+
+        if panel.runModal() == .OK, let url = panel.url {
+            if appState.selectedEntries.isEmpty {
+                appState.extractAll(to: url)
+            } else {
+                appState.extractSelected(to: url)
+            }
+        }
+        #else
+        showingDestinationPicker = true
+        #endif
+    }
 
     private func countAllItems(_ entries: [ZipEntry]) -> Int {
         var count = entries.count

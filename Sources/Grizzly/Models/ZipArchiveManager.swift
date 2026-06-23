@@ -12,6 +12,8 @@ class ZipArchiveManager {
         case extractionFailed(String)
         case readFailed(String)
         case passwordProtected
+        case creationFailed(String)
+        case cancelled
 
         var errorDescription: String? {
             switch self {
@@ -25,6 +27,10 @@ class ZipArchiveManager {
                 return "Read failed: \(message)"
             case .passwordProtected:
                 return "This archive is password protected and cannot be opened. WIP for password support."
+            case .creationFailed(let message):
+                return "Failed to create archive: \(message)"
+            case .cancelled:
+                return "Operation cancelled"
             }
         }
     }
@@ -341,18 +347,17 @@ class ZipArchiveManager {
 
         try FileManager.default.createDirectory(at: destinationURL, withIntermediateDirectories: true)
 
+        // ZIPFoundation drives this Progress object as it extracts each entry,
+        // so observe its fractionCompleted to report real incremental progress.
+        let extractProgress = Progress()
+        let observation = extractProgress.observe(\.fractionCompleted, options: [.new]) { prog, _ in
+            progress?(prog.fractionCompleted, "Extracting...")
+        }
+        defer { observation.invalidate() }
+
         do {
-            let extractProgress = Progress(totalUnitCount: 100)
-            extractProgress.cancellationHandler = {
-                // Handle cancellation if needed
-            }
-
             try FileManager.default.unzipItem(at: archiveURL, to: destinationURL, progress: extractProgress)
-
-            // Monitor progress if callback is provided
-            if let progressCallback = progress {
-                progressCallback(1.0, "Extracting...")
-            }
+            progress?(1.0, "Complete")
         } catch {
             throw ZipError.extractionFailed(error.localizedDescription)
         }
@@ -383,6 +388,130 @@ class ZipArchiveManager {
         archive = nil
         archiveURL = nil
     }
+
+    // MARK: - Archive Creation (Compression)
+
+    /// Creates a new ZIP archive at `destinationURL` containing the given source
+    /// files/folders. Each top-level item keeps its name at the archive root
+    /// (Finder "Compress Items" style); folders are walked recursively.
+    ///
+    /// - Parameters:
+    ///   - sources: Absolute file URLs of the files/folders to compress.
+    ///   - destinationURL: Where to write the resulting `.zip` (overwritten if it exists).
+    ///   - compress: `true` for Deflate compression, `false` to store without compression.
+    ///   - overallProgress: A `Progress` the caller can retain to cancel the operation.
+    ///   - onProgress: Reports fraction complete (0...1) and the current item's display name.
+    func createArchive(from sources: [URL],
+                       to destinationURL: URL,
+                       compress: Bool = true,
+                       overallProgress: Progress = Progress(),
+                       onProgress: ((Double, String) -> Void)? = nil) throws {
+        let fileManager = FileManager()
+
+        // The save panel already confirmed replacement, so remove any existing file.
+        if fileManager.fileExists(atPath: destinationURL.path) {
+            try? fileManager.removeItem(at: destinationURL)
+        }
+
+        let archive: Archive
+        do {
+            archive = try Archive(url: destinationURL, accessMode: .create)
+        } catch {
+            throw ZipError.creationFailed(error.localizedDescription)
+        }
+
+        // Flatten every source into concrete entries. `archivePath` is the path
+        // stored inside the zip; `fileURL` is the item on disk (kept separate so
+        // colliding top-level names can be renamed without breaking disk lookup).
+        struct PendingEntry {
+            let archivePath: String
+            let fileURL: URL
+            let displayName: String
+        }
+
+        var pending: [PendingEntry] = []
+        var usedRootNames = Set<String>()
+
+        for source in sources {
+            var rootName = source.lastPathComponent
+            if usedRootNames.contains(rootName) {
+                rootName = uniqueRootName(rootName, used: usedRootNames)
+            }
+            usedRootNames.insert(rootName)
+
+            var isDir: ObjCBool = false
+            guard fileManager.fileExists(atPath: source.path, isDirectory: &isDir) else { continue }
+
+            if isDir.boolValue {
+                // Directory root entry (preserves the folder itself, even if empty).
+                pending.append(PendingEntry(archivePath: rootName + "/", fileURL: source, displayName: rootName))
+
+                let subpaths = (try? fileManager.subpathsOfDirectory(atPath: source.path)) ?? []
+                for sub in subpaths {
+                    if (sub as NSString).lastPathComponent == ".DS_Store" { continue }
+                    pending.append(PendingEntry(archivePath: rootName + "/" + sub,
+                                                fileURL: source.appendingPathComponent(sub),
+                                                displayName: rootName))
+                }
+            } else {
+                pending.append(PendingEntry(archivePath: rootName, fileURL: source, displayName: rootName))
+            }
+        }
+
+        guard !pending.isEmpty else {
+            throw ZipError.creationFailed("No files to compress")
+        }
+
+        // Pre-compute total work units for accurate aggregate progress.
+        let totalUnits = pending.reduce(Int64(0)) { $0 + max(archive.totalUnitCountForAddingItem(at: $1.fileURL), 0) }
+        overallProgress.totalUnitCount = max(totalUnits, 1)
+
+        // KVO on fractionCompleted gives smooth progress even within a large file.
+        let nameBox = ProgressNameBox()
+        let observation = overallProgress.observe(\.fractionCompleted, options: [.new]) { prog, _ in
+            onProgress?(prog.fractionCompleted, nameBox.name)
+        }
+        defer { observation.invalidate() }
+
+        do {
+            for entry in pending {
+                nameBox.name = entry.displayName
+                let unit = max(archive.totalUnitCountForAddingItem(at: entry.fileURL), 0)
+                let child = Progress(totalUnitCount: unit)
+                overallProgress.addChild(child, withPendingUnitCount: unit)
+                try archive.addEntry(with: entry.archivePath,
+                                     fileURL: entry.fileURL,
+                                     compressionMethod: compress ? .deflate : .none,
+                                     progress: child)
+            }
+            onProgress?(1.0, "Complete")
+        } catch Archive.ArchiveError.cancelledOperation {
+            try? fileManager.removeItem(at: destinationURL) // discard the partial archive
+            throw ZipError.cancelled
+        } catch {
+            try? fileManager.removeItem(at: destinationURL)
+            throw ZipError.creationFailed(error.localizedDescription)
+        }
+    }
+
+    /// Produces a unique top-level name (e.g. "report 2.txt") when two staged
+    /// items share the same file name.
+    private func uniqueRootName(_ name: String, used: Set<String>) -> String {
+        let ext = (name as NSString).pathExtension
+        let base = (name as NSString).deletingPathExtension
+        var index = 2
+        while true {
+            let candidate = ext.isEmpty ? "\(base) \(index)" : "\(base) \(index).\(ext)"
+            if !used.contains(candidate) { return candidate }
+            index += 1
+        }
+    }
+}
+
+/// Small reference box so the progress observer can read the name of the item
+/// currently being compressed (updated on the same thread that adds entries).
+private final class ProgressNameBox {
+    var name: String = ""
 }
 
 // MARK: - Data Reading Extensions

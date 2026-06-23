@@ -112,10 +112,13 @@ class AppState: ObservableObject {
         isExtracting = true
         extractionProgress = 0
 
-        Task {
+        // Run the extraction off the main thread so the UI stays responsive
+        // and the progress bar can animate while files are written.
+        let manager = archiveManager
+        let entriesToExtract = Array(selectedEntries)
+        Task.detached(priority: .userInitiated) {
             do {
-                let entriesToExtract = Array(selectedEntries)
-                try archiveManager.extractEntries(entriesToExtract, to: destinationURL) { progress, fileName in
+                try manager.extractEntries(entriesToExtract, to: destinationURL) { progress, fileName in
                     Task { @MainActor in
                         self.extractionProgress = progress
                         self.extractionFileName = fileName
@@ -157,12 +160,17 @@ class AppState: ObservableObject {
             extractionFileName = entry.name
         }
 
+        // Run the extraction off the main thread so the UI stays responsive
+        // and the progress bar can animate while files are written.
+        let manager = archiveManager
         do {
-            try archiveManager.extractEntry(entry, to: destinationURL) { progress in
-                Task { @MainActor in
-                    self.extractionProgress = progress
+            try await Task.detached(priority: .userInitiated) {
+                try manager.extractEntry(entry, to: destinationURL) { progress in
+                    Task { @MainActor in
+                        self.extractionProgress = progress
+                    }
                 }
-            }
+            }.value
 
             await MainActor.run {
                 self.isExtracting = false
@@ -195,9 +203,12 @@ class AppState: ObservableObject {
         isExtracting = true
         extractionProgress = 0
 
-        Task {
+        // Run the extraction off the main thread so the UI stays responsive
+        // and the progress bar can animate while files are written.
+        let manager = archiveManager
+        Task.detached(priority: .userInitiated) {
             do {
-                try archiveManager.extractAll(to: destinationURL) { progress, fileName in
+                try manager.extractAll(to: destinationURL) { progress, fileName in
                     Task { @MainActor in
                         self.extractionProgress = progress
                         self.extractionFileName = fileName

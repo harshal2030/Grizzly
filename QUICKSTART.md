@@ -101,6 +101,7 @@ This creates a proper macOS app with:
 
 ### File Operations
 - `Cmd+O` - Open zip file / Open selected files
+- `Cmd+Shift+N` - New Archive (create a zip)
 - `Spacebar` - Quick Look preview
 - `Cmd+E` - Extract selected items
 - `Cmd+Shift+E` - Extract all

@@ -3,6 +3,29 @@ import UniformTypeIdentifiers
 
 #if os(macOS)
 import AppKit
+
+/// Identifier for the single "New Archive" staging window scene.
+let archiveBuilderWindowID = "archive-builder"
+
+/// App menu commands. Lives in its own `Commands` type so it can read the
+/// `openWindow` environment action to present the archive builder.
+struct GrizzlyCommands: Commands {
+    @Environment(\.openWindow) private var openWindow
+
+    var body: some Commands {
+        CommandGroup(replacing: .newItem) {
+            Button("Open Zip File...") {
+                ZipFileOpener.shared.openZipFile()
+            }
+            .keyboardShortcut("o", modifiers: .command)
+
+            Button("New Archive...") {
+                openWindow(id: archiveBuilderWindowID)
+            }
+            .keyboardShortcut("n", modifiers: [.command, .shift])
+        }
+    }
+}
 #endif
 
 @main
@@ -23,14 +46,14 @@ struct GrizzlyApp: App {
             WindowContentView(fileURL: $fileURL, appDelegate: appDelegate)
         }
         .commands {
-            CommandGroup(replacing: .newItem) {
-                Button("Open Zip File...") {
-                    ZipFileOpener.shared.openZipFile()
-                }
-                .keyboardShortcut("o", modifiers: .command)
-            }
+            GrizzlyCommands()
         }
         .defaultSize(width: 800, height: 600)
+
+        Window("New Archive", id: archiveBuilderWindowID) {
+            ArchiveBuilderView()
+        }
+        .defaultSize(width: 540, height: 480)
         #else
         WindowGroup {
             IOSContentView()
@@ -153,6 +176,15 @@ struct EmptyDocumentView: View {
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
+
+                Button {
+                    openWindow(id: archiveBuilderWindowID)
+                } label: {
+                    Label("Create New Archive…", systemImage: "plus")
+                }
+                .buttonStyle(.bordered)
+                .controlSize(.large)
+                .padding(.top, 4)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
