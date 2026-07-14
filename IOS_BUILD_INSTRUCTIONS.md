@@ -10,33 +10,42 @@ Grizzly now supports both macOS and iOS/iPadOS! The app has been made cross-plat
 
 ## Building for iOS/iPadOS
 
+The iOS app is defined by the XcodeGen project (`project.yml`), which produces
+separate `Grizzly-iOS` and `Grizzly-macOS` application targets. The root
+`Package.swift` builds a **macOS executable** and cannot produce an iOS app, so
+generate the Xcode project first:
+
+```bash
+brew install xcodegen   # if not already installed
+xcodegen generate       # writes Grizzly.xcodeproj from project.yml
+open Grizzly.xcodeproj
+```
+
 ### Option 1: Using Xcode (Recommended)
 
-1. Open the project in Xcode:
-   ```bash
-   open Package.swift
-   ```
-
-2. In Xcode:
-   - Select the `Grizzly` scheme
-   - Choose an iOS destination (simulator or device) from the destination picker
-   - Press `Cmd+R` to build and run
+In Xcode:
+- Select the `Grizzly-iOS` scheme (Xcode creates it automatically on first open)
+- Choose an iOS destination (simulator or device) from the destination picker
+- Press `Cmd+R` to build and run
 
 ### Option 2: Using xcodebuild
 
 To build for iOS simulator:
 ```bash
-xcodebuild -scheme Grizzly \
+xcodebuild -project Grizzly.xcodeproj -scheme Grizzly-iOS \
   -destination 'platform=iOS Simulator,name=iPad Pro (12.9-inch),OS=latest' \
-  -derivedDataPath .build
+  build
 ```
 
 To build for iOS device:
 ```bash
-xcodebuild -scheme Grizzly \
+xcodebuild -project Grizzly.xcodeproj -scheme Grizzly-iOS \
   -destination 'generic/platform=iOS' \
-  -derivedDataPath .build
+  build
 ```
+
+> If a scheme isn't found, open `Grizzly.xcodeproj` in Xcode once (which
+> auto-creates the target schemes) or substitute `-target Grizzly-iOS`.
 
 ## Platform Differences
 

@@ -98,6 +98,7 @@ final class ArchiveBuilderState: ObservableObject {
 
     func createArchive(to destinationURL: URL) {
         guard !items.isEmpty else { return }
+        guard !isCompressing else { return }
 
         let sources = items.map { $0.url }
         let progressObject = Progress()
@@ -110,7 +111,7 @@ final class ArchiveBuilderState: ObservableObject {
         let manager = manager
         Task.detached(priority: .userInitiated) {
             do {
-                try manager.createArchive(from: sources,
+                try await manager.createArchive(from: sources,
                                           to: destinationURL,
                                           overallProgress: progressObject) { fraction, name in
                     Task { @MainActor in

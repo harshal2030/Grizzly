@@ -103,6 +103,7 @@ class AppState: ObservableObject {
 
     func extractSelected(to destinationURL: URL) {
         guard !selectedEntries.isEmpty else { return }
+        guard !isExtracting else { return }
 
         // Start accessing security-scoped resource for destination on iOS
         #if os(iOS)
@@ -118,7 +119,7 @@ class AppState: ObservableObject {
         let entriesToExtract = Array(selectedEntries)
         Task.detached(priority: .userInitiated) {
             do {
-                try manager.extractEntries(entriesToExtract, to: destinationURL) { progress, fileName in
+                try await manager.extractEntries(entriesToExtract, to: destinationURL) { progress, fileName in
                     Task { @MainActor in
                         self.extractionProgress = progress
                         self.extractionFileName = fileName
@@ -149,6 +150,8 @@ class AppState: ObservableObject {
     }
 
     func extractEntry(_ entry: ZipEntry, to destinationURL: URL) async {
+        guard !isExtracting else { return }
+
         // Start accessing security-scoped resource for destination on iOS
         #if os(iOS)
         let accessing = destinationURL.startAccessingSecurityScopedResource()
@@ -165,7 +168,7 @@ class AppState: ObservableObject {
         let manager = archiveManager
         do {
             try await Task.detached(priority: .userInitiated) {
-                try manager.extractEntry(entry, to: destinationURL) { progress in
+                try await manager.extractEntry(entry, to: destinationURL) { progress in
                     Task { @MainActor in
                         self.extractionProgress = progress
                     }
@@ -195,6 +198,8 @@ class AppState: ObservableObject {
     }
 
     func extractAll(to destinationURL: URL) {
+        guard !isExtracting else { return }
+
         // Start accessing security-scoped resource for destination on iOS
         #if os(iOS)
         let accessing = destinationURL.startAccessingSecurityScopedResource()
@@ -208,7 +213,7 @@ class AppState: ObservableObject {
         let manager = archiveManager
         Task.detached(priority: .userInitiated) {
             do {
-                try manager.extractAll(to: destinationURL) { progress, fileName in
+                try await manager.extractAll(to: destinationURL) { progress, fileName in
                     Task { @MainActor in
                         self.extractionProgress = progress
                         self.extractionFileName = fileName
@@ -239,7 +244,7 @@ class AppState: ObservableObject {
     }
 
     func getPreviewData(for entry: ZipEntry) async throws -> Data {
-        return try archiveManager.getPreviewData(for: entry)
+        return try await archiveManager.getPreviewData(for: entry)
     }
 
     func toggleSelection(_ entry: ZipEntry) {

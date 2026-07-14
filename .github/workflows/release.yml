@@ -18,14 +18,14 @@ jobs:
       with:
         xcode-version: latest-stable
 
-    - name: Build app
-      run: |
-        chmod +x build-app.sh
-        ./build-app.sh
-
     - name: Get version from tag
       id: get_version
       run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+    - name: Build app
+      run: |
+        chmod +x build-app.sh
+        VERSION=${{ steps.get_version.outputs.VERSION }} ./build-app.sh
 
     - name: Create DMG
       run: |

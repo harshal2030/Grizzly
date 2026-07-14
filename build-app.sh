@@ -18,6 +18,11 @@ APP_BUNDLE="$APP_NAME.app"
 BUILD_DIR=".build/apple/Products/Release"
 APP_DIR="$BUILD_DIR/$APP_BUNDLE"
 
+# Bundle identity. Keep the bundle ID in sync with project.yml and the docs.
+# VERSION is supplied by CI from the git tag; default to 1.0 for local builds.
+BUNDLE_ID="com.grizzly.ZipViewer"
+VERSION="${VERSION:-1.0}"
+
 echo "📦 Creating app bundle structure..."
 
 # Remove old app bundle if it exists
@@ -51,15 +56,15 @@ cat > "$APP_DIR/Contents/Info.plist" << EOF
     <key>CFBundleExecutable</key>
     <string>$APP_NAME</string>
     <key>CFBundleIdentifier</key>
-    <string>com.grizzly.$APP_NAME</string>
+    <string>$BUNDLE_ID</string>
     <key>CFBundleName</key>
     <string>$APP_NAME</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.0</string>
+    <string>$VERSION</string>
     <key>CFBundleVersion</key>
-    <string>1</string>
+    <string>$VERSION</string>
     <key>CFBundleIconFile</key>
     <string>AppIcon</string>
     <key>LSMinimumSystemVersion</key>

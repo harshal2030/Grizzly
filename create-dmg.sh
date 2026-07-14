@@ -147,7 +147,7 @@ if [ -n "$CODESIGN_IDENTITY" ] && [ "$CODESIGN_IDENTITY" != "-" ] && [ "$CODESIG
         echo "   export NOTARIZE_APPLE_ID=\"your@email.com\""
         echo "   export NOTARIZE_PASSWORD=\"app-specific-password\""
         echo "   export NOTARIZE_TEAM_ID=\"YOUR_TEAM_ID\""
-        echo "   See CODESIGNING.md for details."
+        echo "   See the README for signing and notarization details."
     fi
 else
     echo "ℹ️  Ad-hoc signed app (recommended for open source distribution)"
@@ -161,7 +161,7 @@ else
     echo ""
     echo "   Alternative: Right-click Grizzly.app → Open → Open"
     echo ""
-    echo "   See INSTALLATION.md for detailed user instructions."
+    echo "   See the README for detailed user instructions."
 fi
 
 echo ""

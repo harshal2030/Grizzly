@@ -6,7 +6,7 @@
 
 1. **Navigate to project:**
    ```bash
-   cd ZipViewer
+   cd Grizzly
    ```
 
 2. **Build the app:**

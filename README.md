@@ -43,8 +43,8 @@ A modern cross-platform application for viewing and extracting ZIP archives, bui
 ### Quick Build (Swift Package Manager)
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/Grizzly.git
-cd Grizzly/ZipViewer
+git clone https://github.com/harshal2030/Grizzly.git
+cd Grizzly
 swift build
 swift run
 ```

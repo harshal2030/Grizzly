@@ -1,7 +1,11 @@
 import Foundation
 import ZIPFoundation
 
-class ZipArchiveManager {
+/// Serializes all access to the underlying ZIPFoundation `Archive` (which wraps
+/// a non-thread-safe `FileHandle`). Modelled as an `actor` so that opening,
+/// extracting, previewing, and creating archives can never race each other —
+/// e.g. Quick Look previewing a file while an extraction is in flight.
+actor ZipArchiveManager {
     private var archive: Archive?
     private var archiveURL: URL?
     private(set) var isPasswordProtected: Bool = false
@@ -523,8 +527,10 @@ class ZipArchiveManager {
 }
 
 /// Small reference box so the progress observer can read the name of the item
-/// currently being compressed (updated on the same thread that adds entries).
-private final class ProgressNameBox {
+/// currently being compressed. Written on the actor's executor while adding
+/// entries and read from the `Progress` KVO callback, which fires synchronously
+/// on that same thread — hence `@unchecked Sendable` is safe here.
+private final class ProgressNameBox: @unchecked Sendable {
     var name: String = ""
 }
 

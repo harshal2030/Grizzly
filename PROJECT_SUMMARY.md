@@ -6,7 +6,7 @@ Grizzly is a modern macOS application built with SwiftUI for viewing and extract
 ## Project Structure
 
 ```
-ZipViewer/
+Grizzly/
 ├── Package.swift                      # Swift Package Manager configuration
 ├── Sources/
 │   └── Grizzly/
@@ -27,7 +27,7 @@ ZipViewer/
 ├── create-dmg.sh                      # DMG installer creation script
 ├── AppIcon.icns                       # Custom app icon
 └── .github/workflows/                 # GitHub Actions CI/CD
-    └── build.yml                      # Automated build and release
+    └── release.yml                    # Automated build and release on tags
 
 ```
 
@@ -157,7 +157,7 @@ ZipViewer/
 
 ### Quick Build
 ```bash
-cd ZipViewer
+cd Grizzly
 swift build
 swift run
 ```
@@ -215,7 +215,8 @@ Current dependencies:
 
 ## Testing
 
-No automated tests are currently implemented. Manual testing covers:
+The `GrizzlyTests` target (run with `swift test`) covers the extraction path —
+folder expansion and Zip-Slip path-traversal protection. Manual testing covers:
 - Opening various zip archives
 - Navigating folder structures
 - Extracting files and folders

@@ -66,7 +66,7 @@ final class ExtractionSafetyTests: XCTestCase {
         try FileManager.default.createDirectory(at: dest, withIntermediateDirectories: true)
 
         // Extract the folder only — its children must come along for the ride.
-        try manager.extractEntries([top], to: dest)
+        try await manager.extractEntries([top], to: dest)
 
         let a = dest.appendingPathComponent("top/a.txt")
         let b = dest.appendingPathComponent("top/sub/b.txt")
@@ -88,10 +88,13 @@ final class ExtractionSafetyTests: XCTestCase {
         let dest = tmpDir.appendingPathComponent("out", isDirectory: true)
         try FileManager.default.createDirectory(at: dest, withIntermediateDirectories: true)
 
-        XCTAssertThrowsError(try manager.extractEntries([evil], to: dest)) { error in
-            guard case ZipArchiveManager.ZipError.extractionFailed = error else {
-                return XCTFail("expected .extractionFailed, got \(error)")
-            }
+        do {
+            try await manager.extractEntries([evil], to: dest)
+            XCTFail("expected extraction of a path-traversal entry to throw")
+        } catch ZipArchiveManager.ZipError.extractionFailed {
+            // expected — the containment guard rejected the entry
+        } catch {
+            XCTFail("expected .extractionFailed, got \(error)")
         }
 
         // The escape target (a sibling of `dest`) must never have been created.

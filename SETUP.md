@@ -10,7 +10,7 @@
 
 1. Navigate to the project directory:
 ```bash
-cd ZipViewer
+cd Grizzly
 ```
 
 2. Build the project:
@@ -29,7 +29,7 @@ Since this is a Swift Package, you can open it directly in Xcode:
 
 1. Navigate to the project directory:
 ```bash
-cd ZipViewer
+cd Grizzly
 ```
 
 2. Open the Package.swift in Xcode:
@@ -47,7 +47,7 @@ open Package.swift
 
 1. Navigate to the project directory:
 ```bash
-cd ZipViewer
+cd Grizzly
 ```
 
 2. Generate the Xcode project (deprecated):
@@ -99,7 +99,7 @@ To create a distributable DMG installer:
 
 This will:
 - Build the release app bundle
-- Create a DMG installer at `.build/apple/Products/Release/Grizzly-{version}.dmg`
+- Create a DMG installer at `Grizzly-{version}.dmg` in the repository root
 - Include a customized DMG with installation instructions
 
 **Note**: For distribution outside the Mac App Store, you'll need to code sign the app with your Apple Developer certificate.
@@ -150,7 +150,8 @@ git push origin v1.0.0
 
 ## Running Tests
 
-Currently, no tests are implemented. To add tests:
-1. Create a Tests directory with `GrizzlyTests` target
-2. Add test files
-3. Run: `swift test`
+The `GrizzlyTests` target covers the extraction path (folder expansion and
+Zip-Slip path-traversal protection). Run them with:
+```bash
+swift test
+```
