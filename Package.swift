@@ -16,6 +16,13 @@ let package = Package(
             dependencies: [
                 .product(name: "ZIPFoundation", package: "ZIPFoundation")
             ]
+        ),
+        .testTarget(
+            name: "GrizzlyTests",
+            dependencies: [
+                "Grizzly",
+                .product(name: "ZIPFoundation", package: "ZIPFoundation")
+            ]
         )
     ]
 )

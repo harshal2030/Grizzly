@@ -291,53 +291,67 @@ class ZipArchiveManager {
     }
 
     func extractEntry(_ entry: ZipEntry, to destinationURL: URL, progress: ((Double) -> Void)? = nil) throws {
+        try extractEntries([entry], to: destinationURL) { fraction, _ in
+            progress?(fraction)
+        }
+    }
+
+    func extractEntries(_ entries: [ZipEntry], to destinationURL: URL, progress: ((Double, String) -> Void)? = nil) throws {
         guard let archive = archive else {
             throw ZipError.invalidArchive
         }
 
+        // Expand any selected folders into the folder itself plus all of its
+        // descendants. Every file/folder in a zip is an independent entry, so
+        // extracting a bare directory entry on its own would otherwise yield an
+        // empty folder with none of its contents.
+        let targets = entries.flatMap { flattenForExtraction($0) }
+        let total = max(targets.count, 1)
+
+        for (index, target) in targets.enumerated() {
+            progress?(Double(index) / Double(total), target.name)
+            try extractSingleEntry(target, from: archive, to: destinationURL)
+        }
+
+        progress?(1.0, "Complete")
+    }
+
+    /// Extracts a single entry to `destinationURL`, preserving its path within
+    /// the archive. Streams straight to disk (no full-file buffering) and
+    /// rejects entries whose resolved path escapes the destination directory
+    /// (Zip-Slip / path-traversal protection).
+    private func extractSingleEntry(_ entry: ZipEntry, from archive: Archive, to destinationURL: URL) throws {
         guard let archiveEntry = archive[entry.path] else {
-            throw ZipError.fileNotFound
+            // No concrete archive entry — e.g. an intermediate directory that
+            // isn't stored explicitly. Its file children create the path on demand.
+            return
+        }
+
+        let entryURL = destinationURL.appendingPathComponent(entry.path)
+
+        // Reject `../`-style paths that would resolve outside the destination.
+        guard entryURL.isContained(in: destinationURL) else {
+            throw ZipError.extractionFailed("\"\(entry.path)\" would be written outside the destination folder")
+        }
+
+        // Overwrite an existing file (Finder-style). Directories are left in
+        // place so already-extracted siblings aren't removed.
+        if !entry.isDirectory {
+            try? FileManager.default.removeItem(at: entryURL)
         }
 
         do {
-            if entry.isDirectory {
-                // For directories, preserve the full path structure
-                let extractProgress = Progress(totalUnitCount: Int64(entry.uncompressedSize))
-                _ = try archive.extract(archiveEntry, to: destinationURL, skipCRC32: false, progress: extractProgress)
-            } else {
-                // For single files, preserve the full path from the zip
-                let fileDestination = destinationURL.appendingPathComponent(entry.path)
-
-                // Create parent directories if needed
-                let parentDirectory = fileDestination.deletingLastPathComponent()
-                try FileManager.default.createDirectory(at: parentDirectory, withIntermediateDirectories: true, attributes: nil)
-
-                // Read the file data
-                var fileData = Data()
-                _ = try archive.extract(archiveEntry, skipCRC32: false) { chunk in
-                    fileData.append(chunk)
-                }
-
-                // Write to destination with full path
-                try fileData.write(to: fileDestination)
-            }
-
-            // Call progress callback if provided
-            progress?(1.0)
+            _ = try archive.extract(archiveEntry, to: entryURL, skipCRC32: false)
         } catch {
             throw ZipError.extractionFailed(error.localizedDescription)
         }
     }
 
-    func extractEntries(_ entries: [ZipEntry], to destinationURL: URL, progress: ((Double, String) -> Void)? = nil) throws {
-        let totalEntries = Double(entries.count)
-
-        for (index, entry) in entries.enumerated() {
-            progress?(Double(index) / totalEntries, entry.name)
-            try extractEntry(entry, to: destinationURL)
-        }
-
-        progress?(1.0, "Complete")
+    /// Returns `entry` followed by all of its descendants (pre-order) so a
+    /// selected folder expands into its full contents for extraction.
+    private func flattenForExtraction(_ entry: ZipEntry) -> [ZipEntry] {
+        guard entry.isDirectory else { return [entry] }
+        return [entry] + entry.children.flatMap { flattenForExtraction($0) }
     }
 
     func extractAll(to destinationURL: URL, progress: ((Double, String) -> Void)? = nil) throws {
