@@ -18,6 +18,9 @@ jobs:
       with:
         xcode-version: latest-stable
 
+    - name: Install XcodeGen
+      run: brew install xcodegen
+
     - name: Get version from tag
       id: get_version
       run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT

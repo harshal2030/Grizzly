@@ -79,6 +79,8 @@ targets:
           - "**/.DS_Store"
     dependencies:
       - package: ZIPFoundation
+      - target: GrizzlyQuickLook
+        embed: true
     settings:
       base:
         PRODUCT_NAME: Grizzly
@@ -113,3 +115,27 @@ targets:
               </array>
             </dict>
           </array>
+
+  # Quick Look preview extension (macOS): renders a .zip's contents when the
+  # file is previewed in Finder (spacebar), Mail, etc. Embedded into the macOS
+  # app above via its `embed: true` dependency.
+  GrizzlyQuickLook:
+    type: app-extension
+    platform: macOS
+    deploymentTarget: "14.0"
+    sources:
+      - path: QuickLookExtension
+        excludes:
+          - "**/.DS_Store"
+    dependencies:
+      - package: ZIPFoundation
+    settings:
+      base:
+        PRODUCT_NAME: GrizzlyQuickLook
+        PRODUCT_BUNDLE_IDENTIFIER: com.grizzly.ZipViewer.QuickLook
+        GENERATE_INFOPLIST_FILE: NO
+        INFOPLIST_FILE: QuickLookExtension/Info.plist
+        CODE_SIGN_ENTITLEMENTS: GrizzlyQuickLook.entitlements
+        CODE_SIGN_STYLE: Automatic
+        ENABLE_HARDENED_RUNTIME: YES
+        SKIP_INSTALL: YES

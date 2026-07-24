@@ -3,44 +3,84 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 63;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		0016AA03AE73EB27CD8227F9 /* ZipEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F0E0A847348D3D340E1169 /* ZipEntry.swift */; };
-		0123456789ABCDEF01234567 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6G7H8I9J0K1L2 /* Assets.xcassets */; };
-		0123456789ABCDEF01234568 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6G7H8I9J0K1L2 /* Assets.xcassets */; };
+		08FD1D63C8173C954F1261DC /* ArchiveBuilderState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C89683BE40674E90B7539483 /* ArchiveBuilderState.swift */; };
+		091C2C73477AA95811CD7061 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 655D1E85EF779BED7C4E0BF8 /* PreviewViewController.swift */; };
+		12408CC40528799464357BA8 /* ArchiveContentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293065B6B8402EB31201684C /* ArchiveContentsView.swift */; };
 		1475777E31B7D4C051EBBE0C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD642EE3A3862B483DCE658E /* ContentView.swift */; };
 		1F9EE5FE6404E40C0EB0E24A /* ZipDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1304DC79D5BE581AF8C29D48 /* ZipDocument.swift */; };
 		26D3AB645BD4A49B853E19A4 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865BBCE33F6B7EE21699D5B5 /* AppState.swift */; };
+		2C9F2702E5463CEFD82A8032 /* ArchiveBuilderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B903D8DD5556528C086D5F /* ArchiveBuilderView.swift */; };
+		38B3656BE1C05CAB905415E5 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 387FAE1CBAFB993FD28A2778 /* ZIPFoundation */; };
+		38D5406249EC1E55347734E3 /* ArchiveBuilderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B903D8DD5556528C086D5F /* ArchiveBuilderView.swift */; };
+		3F59EB01F8BEE2F17704C790 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FCEE283A1B7230EC5A2B9319 /* Assets.xcassets */; };
 		43ED4A9B00CAA4FA32BF32D7 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 4FE13F1FCAE7E45C00FCA8AF /* ZIPFoundation */; };
 		490F9167131AE5637988392F /* ZipArchiveManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6D9E5B4CDBE513E4BECB54 /* ZipArchiveManager.swift */; };
 		5825B2F74C542D06D0C9787D /* GrizzlyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D5106F4D7190F04BF0F87AD /* GrizzlyApp.swift */; };
 		5C2DFAE5892587BA2A3846F2 /* GrizzlyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D5106F4D7190F04BF0F87AD /* GrizzlyApp.swift */; };
 		62BFD3385F720F810598273F /* ZipEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F0E0A847348D3D340E1169 /* ZipEntry.swift */; };
+		64B6A08867F082A7B9881F95 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FCEE283A1B7230EC5A2B9319 /* Assets.xcassets */; };
+		6BE29E55D39BF469B55CC08E /* ArchivePreviewReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27730342BB4BED61E13ECB66 /* ArchivePreviewReader.swift */; };
 		7BB82E8313D7F74F434FC557 /* ZipTreeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91ED674EFFAE42192837C7A2 /* ZipTreeView.swift */; };
+		8EEC2A56B4F4A3A7EDE7FA27 /* ArchiveBuilderState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C89683BE40674E90B7539483 /* ArchiveBuilderState.swift */; };
 		9383C6256F1DFFF69EDBB4FE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD642EE3A3862B483DCE658E /* ContentView.swift */; };
 		9A516A4F0075665423F3D899 /* PlatformUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B1C82060670B0C0DAE5CE1 /* PlatformUtils.swift */; };
 		9D162FF2231E5971411C36E7 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = D4BE5B09CEB8AAFF58A8C09B /* ZIPFoundation */; };
 		9F23272B064F47AE623E90FC /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865BBCE33F6B7EE21699D5B5 /* AppState.swift */; };
+		BBA0A877A31D9164A2B6E03E /* GrizzlyQuickLook.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8B7C7C6E237ECBDADA7B42D9 /* GrizzlyQuickLook.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		C422B31B47857C5D61E648B6 /* ZipDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1304DC79D5BE581AF8C29D48 /* ZipDocument.swift */; };
 		D5920239DA8763CC02145AF5 /* ZipTreeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91ED674EFFAE42192837C7A2 /* ZipTreeView.swift */; };
 		E1B1BFE7C231BD6D986123A6 /* PlatformUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B1C82060670B0C0DAE5CE1 /* PlatformUtils.swift */; };
 		F4336B7B336D1AED5BA759B2 /* ZipArchiveManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6D9E5B4CDBE513E4BECB54 /* ZipArchiveManager.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		9BCB9FDB50DC976C6801138E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9661FF6F24A800808EFB9A80 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43867841A1D460514A1746D3;
+			remoteInfo = GrizzlyQuickLook;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		35442A4812E3AD69D49A7D85 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				BBA0A877A31D9164A2B6E03E /* GrizzlyQuickLook.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		1304DC79D5BE581AF8C29D48 /* ZipDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZipDocument.swift; sourceTree = "<group>"; };
 		192640E8E89B093347CC37FA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		19B1C82060670B0C0DAE5CE1 /* PlatformUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformUtils.swift; sourceTree = "<group>"; };
 		21F0E0A847348D3D340E1169 /* ZipEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZipEntry.swift; sourceTree = "<group>"; };
+		27730342BB4BED61E13ECB66 /* ArchivePreviewReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivePreviewReader.swift; sourceTree = "<group>"; };
+		293065B6B8402EB31201684C /* ArchiveContentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveContentsView.swift; sourceTree = "<group>"; };
 		4D5106F4D7190F04BF0F87AD /* GrizzlyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrizzlyApp.swift; sourceTree = "<group>"; };
-		5B4F6845727C37914D1AB976 /* Grizzly.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Grizzly.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		6C9539569A06BCB8817B48CE /* Grizzly.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Grizzly.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5B4F6845727C37914D1AB976 /* Grizzly-macOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Grizzly-macOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		655D1E85EF779BED7C4E0BF8 /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
+		68B903D8DD5556528C086D5F /* ArchiveBuilderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveBuilderView.swift; sourceTree = "<group>"; };
+		6C9539569A06BCB8817B48CE /* Grizzly-iOS.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "Grizzly-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		865BBCE33F6B7EE21699D5B5 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		8B7C7C6E237ECBDADA7B42D9 /* GrizzlyQuickLook.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GrizzlyQuickLook.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		91ED674EFFAE42192837C7A2 /* ZipTreeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZipTreeView.swift; sourceTree = "<group>"; };
-		A1B2C3D4E5F6G7H8I9J0K1L2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AD642EE3A3862B483DCE658E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		BB49CB83D920F286C2BCDCB0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		C89683BE40674E90B7539483 /* ArchiveBuilderState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveBuilderState.swift; sourceTree = "<group>"; };
+		FCEE283A1B7230EC5A2B9319 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FF6D9E5B4CDBE513E4BECB54 /* ZipArchiveManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZipArchiveManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -61,34 +101,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B700E07642428C29AAE8ACFC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				38B3656BE1C05CAB905415E5 /* ZIPFoundation in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
-
-/* Begin PBXResourcesBuildPhase section */
-		AAAA1111BBBB2222CCCC3333 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				0123456789ABCDEF01234567 /* Assets.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DDDD4444EEEE5555FFFF6666 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				0123456789ABCDEF01234568 /* Assets.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXGroup section */
 		25DECDD8BEC91D779CDBB66F /* Grizzly */ = {
 			isa = PBXGroup;
 			children = (
+				FCEE283A1B7230EC5A2B9319 /* Assets.xcassets */,
 				4D5106F4D7190F04BF0F87AD /* GrizzlyApp.swift */,
 				192640E8E89B093347CC37FA /* Info.plist */,
-				A1B2C3D4E5F6G7H8I9J0K1L2 /* Assets.xcassets */,
 				939C27E80797EB80B36C0F35 /* Models */,
 				EE1561F3C33F5BE512A59A11 /* Utilities */,
 				9582130201E356430DAF42BE /* ViewModels */,
@@ -101,15 +130,36 @@
 		2D50DA35AB41692D8072B983 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6C9539569A06BCB8817B48CE /* Grizzly.app */,
-				5B4F6845727C37914D1AB976 /* Grizzly.app */,
+				6C9539569A06BCB8817B48CE /* Grizzly-iOS.app */,
+				5B4F6845727C37914D1AB976 /* Grizzly-macOS.app */,
+				8B7C7C6E237ECBDADA7B42D9 /* GrizzlyQuickLook.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		5C0946B17EE3AB1333C739CD /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				27730342BB4BED61E13ECB66 /* ArchivePreviewReader.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		5EC74C3204D0A1465FC671B8 /* QuickLookExtension */ = {
+			isa = PBXGroup;
+			children = (
+				293065B6B8402EB31201684C /* ArchiveContentsView.swift */,
+				BB49CB83D920F286C2BCDCB0 /* Info.plist */,
+				655D1E85EF779BED7C4E0BF8 /* PreviewViewController.swift */,
+				5C0946B17EE3AB1333C739CD /* Core */,
+			);
+			path = QuickLookExtension;
 			sourceTree = "<group>";
 		};
 		75B7B13F210A1C35EB60A72F /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				68B903D8DD5556528C086D5F /* ArchiveBuilderView.swift */,
 				AD642EE3A3862B483DCE658E /* ContentView.swift */,
 				91ED674EFFAE42192837C7A2 /* ZipTreeView.swift */,
 			);
@@ -130,6 +180,7 @@
 			isa = PBXGroup;
 			children = (
 				865BBCE33F6B7EE21699D5B5 /* AppState.swift */,
+				C89683BE40674E90B7539483 /* ArchiveBuilderState.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -138,6 +189,7 @@
 			isa = PBXGroup;
 			children = (
 				25DECDD8BEC91D779CDBB66F /* Grizzly */,
+				5EC74C3204D0A1465FC671B8 /* QuickLookExtension */,
 				2D50DA35AB41692D8072B983 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -153,12 +205,31 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		43867841A1D460514A1746D3 /* GrizzlyQuickLook */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 670B088F18421698CFD697B9 /* Build configuration list for PBXNativeTarget "GrizzlyQuickLook" */;
+			buildPhases = (
+				D2120FFDA3D784C13E60991F /* Sources */,
+				B700E07642428C29AAE8ACFC /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GrizzlyQuickLook;
+			packageProductDependencies = (
+				387FAE1CBAFB993FD28A2778 /* ZIPFoundation */,
+			);
+			productName = GrizzlyQuickLook;
+			productReference = 8B7C7C6E237ECBDADA7B42D9 /* GrizzlyQuickLook.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		72307D1856ACA50C47BE96D0 /* Grizzly-iOS */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 065C388C887786BB0188C831 /* Build configuration list for PBXNativeTarget "Grizzly-iOS" */;
 			buildPhases = (
-				AAAA1111BBBB2222CCCC3333 /* Resources */,
 				13D9669988135F8CB0E47D4F /* Sources */,
+				5830B45B518655A582EB0EE8 /* Resources */,
 				208D6D66D52C422A7654444B /* Frameworks */,
 			);
 			buildRules = (
@@ -170,27 +241,29 @@
 				4FE13F1FCAE7E45C00FCA8AF /* ZIPFoundation */,
 			);
 			productName = "Grizzly-iOS";
-			productReference = 6C9539569A06BCB8817B48CE /* Grizzly.app */;
+			productReference = 6C9539569A06BCB8817B48CE /* Grizzly-iOS.app */;
 			productType = "com.apple.product-type.application";
 		};
 		A0D34675C6D705E5D10FD866 /* Grizzly-macOS */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = B2F6DE747346CA626D66393D /* Build configuration list for PBXNativeTarget "Grizzly-macOS" */;
 			buildPhases = (
-				DDDD4444EEEE5555FFFF6666 /* Resources */,
 				111DD7E3031B620800F03526 /* Sources */,
+				C376C468A993DCB516FAF4B1 /* Resources */,
 				7E760610FC57AC63E8B9C4BA /* Frameworks */,
+				35442A4812E3AD69D49A7D85 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				6DB47D5FEB5032D840B7E89B /* PBXTargetDependency */,
 			);
 			name = "Grizzly-macOS";
 			packageProductDependencies = (
 				D4BE5B09CEB8AAFF58A8C09B /* ZIPFoundation */,
 			);
 			productName = "Grizzly-macOS";
-			productReference = 5B4F6845727C37914D1AB976 /* Grizzly.app */;
+			productReference = 5B4F6845727C37914D1AB976 /* Grizzly-macOS.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -200,9 +273,13 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 1640;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
+					43867841A1D460514A1746D3 = {
+						ProvisioningStyle = Automatic;
+					};
 					72307D1856ACA50C47BE96D0 = {
+						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 					A0D34675C6D705E5D10FD866 = {
@@ -212,7 +289,6 @@
 				};
 			};
 			buildConfigurationList = EC7642DE315C49359FB86CC7 /* Build configuration list for PBXProject "Grizzly" */;
-			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -224,14 +300,36 @@
 			packageReferences = (
 				AF43A3B852215C8DBE261ACB /* XCRemoteSwiftPackageReference "ZIPFoundation" */,
 			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 2D50DA35AB41692D8072B983 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				72307D1856ACA50C47BE96D0 /* Grizzly-iOS */,
 				A0D34675C6D705E5D10FD866 /* Grizzly-macOS */,
+				43867841A1D460514A1746D3 /* GrizzlyQuickLook */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5830B45B518655A582EB0EE8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3F59EB01F8BEE2F17704C790 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C376C468A993DCB516FAF4B1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				64B6A08867F082A7B9881F95 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		111DD7E3031B620800F03526 /* Sources */ = {
@@ -239,6 +337,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				26D3AB645BD4A49B853E19A4 /* AppState.swift in Sources */,
+				8EEC2A56B4F4A3A7EDE7FA27 /* ArchiveBuilderState.swift in Sources */,
+				38D5406249EC1E55347734E3 /* ArchiveBuilderView.swift in Sources */,
 				9383C6256F1DFFF69EDBB4FE /* ContentView.swift in Sources */,
 				5825B2F74C542D06D0C9787D /* GrizzlyApp.swift in Sources */,
 				9A516A4F0075665423F3D899 /* PlatformUtils.swift in Sources */,
@@ -254,6 +354,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				9F23272B064F47AE623E90FC /* AppState.swift in Sources */,
+				08FD1D63C8173C954F1261DC /* ArchiveBuilderState.swift in Sources */,
+				2C9F2702E5463CEFD82A8032 /* ArchiveBuilderView.swift in Sources */,
 				1475777E31B7D4C051EBBE0C /* ContentView.swift in Sources */,
 				5C2DFAE5892587BA2A3846F2 /* GrizzlyApp.swift in Sources */,
 				E1B1BFE7C231BD6D986123A6 /* PlatformUtils.swift in Sources */,
@@ -264,7 +366,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D2120FFDA3D784C13E60991F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				12408CC40528799464357BA8 /* ArchiveContentsView.swift in Sources */,
+				6BE29E55D39BF469B55CC08E /* ArchivePreviewReader.swift in Sources */,
+				091C2C73477AA95811CD7061 /* PreviewViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		6DB47D5FEB5032D840B7E89B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43867841A1D460514A1746D3 /* GrizzlyQuickLook */;
+			targetProxy = 9BCB9FDB50DC976C6801138E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		03687761938BE0EDAADA1323 /* Debug */ = {
@@ -272,11 +392,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Grizzly.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -295,15 +413,36 @@
 			};
 			name = Debug;
 		};
+		12E6AFE0690FD8E16388B1F8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = GrizzlyQuickLook.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = QuickLookExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.grizzly.ZipViewer.QuickLook;
+				PRODUCT_NAME = GrizzlyQuickLook;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
 		1B19FC21404919CC455AB2EE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 577V58ZKB7;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Sources/Grizzly/Info.plist;
 				INFOPLIST_KEY_CFBundleDocumentTypes = "<array>\n  <dict>\n    <key>CFBundleTypeExtensions</key>\n    <array>\n      <string>zip</string>\n    </array>\n    <key>CFBundleTypeName</key>\n    <string>ZIP Archive</string>\n    <key>CFBundleTypeRole</key>\n    <string>Viewer</string>\n    <key>LSHandlerRank</key>\n    <string>Owner</string>\n    <key>LSItemContentTypes</key>\n    <array>\n      <string>public.zip-archive</string>\n    </array>\n  </dict>\n</array>\n";
@@ -332,11 +471,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Grizzly.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -355,15 +492,36 @@
 			};
 			name = Release;
 		};
+		AF750A87F830493CEB1BDA55 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = GrizzlyQuickLook.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = QuickLookExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.grizzly.ZipViewer.QuickLook;
+				PRODUCT_NAME = GrizzlyQuickLook;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 		D4CDF71874C75955806259DF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 577V58ZKB7;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Sources/Grizzly/Info.plist;
 				INFOPLIST_KEY_CFBundleDocumentTypes = "<array>\n  <dict>\n    <key>CFBundleTypeExtensions</key>\n    <array>\n      <string>zip</string>\n    </array>\n    <key>CFBundleTypeName</key>\n    <string>ZIP Archive</string>\n    <key>CFBundleTypeRole</key>\n    <string>Viewer</string>\n    <key>LSHandlerRank</key>\n    <string>Owner</string>\n    <key>LSItemContentTypes</key>\n    <array>\n      <string>public.zip-archive</string>\n    </array>\n  </dict>\n</array>\n";
@@ -422,11 +580,9 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
-				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -491,11 +647,9 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
-				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -526,6 +680,15 @@
 			buildConfigurations = (
 				D4CDF71874C75955806259DF /* Debug */,
 				1B19FC21404919CC455AB2EE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		670B088F18421698CFD697B9 /* Build configuration list for PBXNativeTarget "GrizzlyQuickLook" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				12E6AFE0690FD8E16388B1F8 /* Debug */,
+				AF750A87F830493CEB1BDA55 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
@@ -562,6 +725,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		387FAE1CBAFB993FD28A2778 /* ZIPFoundation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AF43A3B852215C8DBE261ACB /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
+			productName = ZIPFoundation;
+		};
 		4FE13F1FCAE7E45C00FCA8AF /* ZIPFoundation */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = AF43A3B852215C8DBE261ACB /* XCRemoteSwiftPackageReference "ZIPFoundation" */;

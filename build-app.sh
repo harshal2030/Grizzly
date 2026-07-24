@@ -1,188 +1,93 @@
 #!/bin/bash
 
-# Build script to create a macOS .app bundle for Grizzly
+# Build a macOS .app bundle for Grizzly, including the embedded Quick Look
+# preview extension.
+#
+# This uses the XcodeGen project (project.yml) via xcodebuild, because the
+# Quick Look extension is an app extension that Swift Package Manager cannot
+# build or embed. The resulting universal (arm64 + x86_64) .app is written to
+# the same location the previous SwiftPM flow used, so create-dmg.sh keeps
+# working unchanged. The app's Info.plist and document-type registration now
+# come solely from project.yml.
 
 set -e
 
-echo "🔨 Building Grizzly.app..."
+echo "🔨 Building Grizzly.app (with Quick Look extension)..."
 
-# Navigate to the project directory
 cd "$(dirname "$0")"
 
-# Build the release binary
-swift build -c release --arch arm64 --arch x86_64
-
-# Create app bundle structure
 APP_NAME="Grizzly"
-APP_BUNDLE="$APP_NAME.app"
-BUILD_DIR=".build/apple/Products/Release"
-APP_DIR="$BUILD_DIR/$APP_BUNDLE"
-
-# Bundle identity. Keep the bundle ID in sync with project.yml and the docs.
 # VERSION is supplied by CI from the git tag; default to 1.0 for local builds.
-BUNDLE_ID="com.grizzly.ZipViewer"
 VERSION="${VERSION:-1.0}"
+DERIVED_DIR=".build/xcode"
+OUTPUT_DIR=".build/apple/Products/Release"
+BUILT_APP="$DERIVED_DIR/Build/Products/Release/$APP_NAME.app"
+APP_DIR="$OUTPUT_DIR/$APP_NAME.app"
+APPEX_REL="Contents/PlugIns/GrizzlyQuickLook.appex"
 
-echo "📦 Creating app bundle structure..."
-
-# Remove old app bundle if it exists
-rm -rf "$APP_DIR"
-
-# Create the bundle structure
-mkdir -p "$APP_DIR/Contents/MacOS"
-mkdir -p "$APP_DIR/Contents/Resources"
-
-# Copy the executable
-cp "$BUILD_DIR/$APP_NAME" "$APP_DIR/Contents/MacOS/$APP_NAME"
-
-# Copy icon if it exists
-if [ -f "AppIcon.icns" ]; then
-    echo "📎 Adding app icon..."
-    cp "AppIcon.icns" "$APP_DIR/Contents/Resources/"
-fi
-
-# Copy entitlements if they exist
-if [ -f "Grizzly.entitlements" ]; then
-    echo "📋 Found entitlements file..."
-    ENTITLEMENTS_PATH="Grizzly.entitlements"
-fi
-
-# Create Info.plist
-cat > "$APP_DIR/Contents/Info.plist" << EOF
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-    <key>CFBundleExecutable</key>
-    <string>$APP_NAME</string>
-    <key>CFBundleIdentifier</key>
-    <string>$BUNDLE_ID</string>
-    <key>CFBundleName</key>
-    <string>$APP_NAME</string>
-    <key>CFBundlePackageType</key>
-    <string>APPL</string>
-    <key>CFBundleShortVersionString</key>
-    <string>$VERSION</string>
-    <key>CFBundleVersion</key>
-    <string>$VERSION</string>
-    <key>CFBundleIconFile</key>
-    <string>AppIcon</string>
-    <key>LSMinimumSystemVersion</key>
-    <string>14.0</string>
-    <key>NSHighResolutionCapable</key>
-    <true/>
-    <key>NSHumanReadableCopyright</key>
-    <string>Copyright © 2025. All rights reserved.</string>
-    <key>CFBundleDocumentTypes</key>
-    <array>
-        <dict>
-            <key>CFBundleTypeName</key>
-            <string>ZIP Archive</string>
-            <key>CFBundleTypeRole</key>
-            <string>Editor</string>
-            <key>CFBundleTypeIconFile</key>
-            <string>AppIcon</string>
-            <key>LSHandlerRank</key>
-            <string>Default</string>
-            <key>LSItemContentTypes</key>
-            <array>
-                <string>public.zip-archive</string>
-                <string>com.pkware.zip-archive</string>
-            </array>
-            <key>CFBundleTypeExtensions</key>
-            <array>
-                <string>zip</string>
-            </array>
-        </dict>
-    </array>
-    <key>UTImportedTypeDeclarations</key>
-    <array>
-        <dict>
-            <key>UTTypeIdentifier</key>
-            <string>public.zip-archive</string>
-            <key>UTTypeReferenceURL</key>
-            <string>https://en.wikipedia.org/wiki/ZIP_(file_format)</string>
-            <key>UTTypeDescription</key>
-            <string>ZIP Archive</string>
-            <key>UTTypeConformsTo</key>
-            <array>
-                <string>public.data</string>
-                <string>public.archive</string>
-            </array>
-            <key>UTTypeTagSpecification</key>
-            <dict>
-                <key>public.filename-extension</key>
-                <array>
-                    <string>zip</string>
-                </array>
-                <key>public.mime-type</key>
-                <array>
-                    <string>application/zip</string>
-                </array>
-            </dict>
-        </dict>
-    </array>
-</dict>
-</plist>
-EOF
-
-# Code signing
-if [ -n "$CODESIGN_IDENTITY" ] && [ "$CODESIGN_IDENTITY" != "auto" ]; then
-    echo "🔏 Signing app with identity: $CODESIGN_IDENTITY"
-
-    # Sign the executable first
-    if [ -n "$ENTITLEMENTS_PATH" ]; then
-        codesign --force --sign "$CODESIGN_IDENTITY" \
-            --entitlements "$ENTITLEMENTS_PATH" \
-            --options runtime \
-            --timestamp \
-            "$APP_DIR/Contents/MacOS/$APP_NAME"
-    else
-        codesign --force --sign "$CODESIGN_IDENTITY" \
-            --options runtime \
-            --timestamp \
-            "$APP_DIR/Contents/MacOS/$APP_NAME"
-    fi
-
-    # Sign the entire app bundle
-    if [ -n "$ENTITLEMENTS_PATH" ]; then
-        codesign --force --sign "$CODESIGN_IDENTITY" \
-            --entitlements "$ENTITLEMENTS_PATH" \
-            --options runtime \
-            --timestamp \
-            "$APP_DIR"
-    else
-        codesign --force --sign "$CODESIGN_IDENTITY" \
-            --options runtime \
-            --timestamp \
-            "$APP_DIR"
-    fi
-
-    # Verify the signature
-    echo "🔍 Verifying code signature..."
-    codesign --verify --verbose "$APP_DIR"
-
-    echo "✅ Code signing complete!"
+# Regenerate the Xcode project from project.yml so the build always matches the
+# declarative spec. Requires XcodeGen (brew install xcodegen).
+if command -v xcodegen >/dev/null 2>&1; then
+    echo "⚙️  Generating Xcode project from project.yml..."
+    xcodegen generate
 else
-    # Use ad-hoc signing by default - gives users "Open Anyway" option
-    echo "🔏 Applying ad-hoc signature (allows 'Open Anyway' in System Settings)..."
-    codesign --force --sign "-" "$APP_DIR/Contents/MacOS/$APP_NAME"
-    codesign --force --sign "-" "$APP_DIR"
-
-    echo "✅ Ad-hoc signing complete!"
-    echo ""
-    echo "ℹ️  Users will be able to open via System Settings → Privacy & Security → Open Anyway"
-    echo ""
-    echo "   For proper distribution without warnings, set CODESIGN_IDENTITY:"
-    echo "   export CODESIGN_IDENTITY=\"Developer ID Application: Your Name (TEAM_ID)\""
+    echo "⚠️  xcodegen not found; using the committed Grizzly.xcodeproj as-is."
+    echo "   Install it with: brew install xcodegen"
 fi
+
+# Build a universal Release build. Signing is handled below so we can apply
+# per-target entitlements to the app and the extension.
+echo "📦 Building universal Release (arm64 + x86_64)..."
+xcodebuild \
+    -project "$APP_NAME.xcodeproj" \
+    -scheme "$APP_NAME-macOS" \
+    -configuration Release \
+    -derivedDataPath "$DERIVED_DIR" \
+    ARCHS="arm64 x86_64" ONLY_ACTIVE_ARCH=NO \
+    MARKETING_VERSION="$VERSION" CURRENT_PROJECT_VERSION="$VERSION" \
+    CODE_SIGNING_ALLOWED=NO \
+    build
+
+# Stage the built app at the location create-dmg.sh expects.
+echo "🚚 Staging app bundle..."
+rm -rf "$APP_DIR"
+mkdir -p "$OUTPUT_DIR"
+cp -R "$BUILT_APP" "$APP_DIR"
+
+# Code signing. The extension (inside PlugIns) must be signed before the app so
+# the app's signature seals it.
+sign() {
+    local target="$1" entitlements="$2"
+    if [ -n "$CODESIGN_IDENTITY" ] && [ "$CODESIGN_IDENTITY" != "auto" ]; then
+        codesign --force --options runtime --timestamp \
+            --sign "$CODESIGN_IDENTITY" --entitlements "$entitlements" "$target"
+    else
+        # Ad-hoc: no hardened runtime / timestamp (can't be notarized anyway).
+        codesign --force --sign "-" --entitlements "$entitlements" "$target"
+    fi
+}
+
+if [ -n "$CODESIGN_IDENTITY" ] && [ "$CODESIGN_IDENTITY" != "auto" ]; then
+    echo "🔏 Signing with identity: $CODESIGN_IDENTITY"
+else
+    echo "🔏 Applying ad-hoc signature (allows 'Open Anyway' in System Settings)..."
+fi
+
+sign "$APP_DIR/$APPEX_REL" "GrizzlyQuickLook.entitlements"
+sign "$APP_DIR" "Grizzly.entitlements"
+
+echo "🔍 Verifying signatures..."
+codesign --verify --deep --verbose=2 "$APP_DIR"
 
 echo "✅ Build complete!"
 echo ""
 echo "App bundle created at: $APP_DIR"
+echo "  (Quick Look extension embedded at $APPEX_REL)"
 echo ""
-echo "To run the app:"
-echo "  open $APP_DIR"
-echo ""
-echo "To copy to Applications:"
-echo "  cp -r $APP_DIR /Applications/"
+echo "To run the app:  open $APP_DIR"
+echo "To install:      cp -r $APP_DIR /Applications/"
+if [ -z "$CODESIGN_IDENTITY" ] || [ "$CODESIGN_IDENTITY" = "auto" ]; then
+    echo ""
+    echo "ℹ️  Ad-hoc signed. Users open via System Settings → Privacy & Security → Open Anyway."
+    echo "   For distribution without warnings, set CODESIGN_IDENTITY to a Developer ID."
+fi
